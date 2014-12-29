@@ -1,0 +1,15 @@
+\newcounter{definitionNumber}
+\renewcommand*\thedefinitionNumber{\thechapter.\arabic{definitionNumber}}
+
+\newcommand{\definition}{ 
+    \refstepcounter{definitionNumber}
+    Definition \arabic{chapter}.\arabic{definitionNumber}.
+}
+
+\newcounter{lemmaNumber}
+\renewcommand*\thelemmaNumber{\thechapter.\arabic{lemmaNumber}}
+
+\newcommand{\lemma}{
+    \refstepcounter{lemmaNumber}
+    Lemma \arabic{chapter}.\arabic{lemmaNumber}.
+}

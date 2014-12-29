@@ -1,3 +1,6 @@
 ~*
 *.o
+*.dvi
+*.log
+*.aux
 automataReader
