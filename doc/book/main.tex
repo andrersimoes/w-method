@@ -23,17 +23,28 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
 
     %TODO: introduzir a subtable z_v
 
-    \lemma Let $\sigma_i$ and $\sigma_j$ be states of machine M. If rows $\sigma_i$ and $\sigma_j$ in the $ z_v $ subtable of M are distinct, then $ \sigma_i \neq \sigma_j $.
+    \lemma \label{labelSimplyDistinct} Let $\sigma_i$ and $\sigma_j$ be states of machine M. If rows $\sigma_i$ and $\sigma_j$ in the $ z_v $ subtable of M are distinct, then $ \sigma_i \neq \sigma_j $.
 
     \emph{Proof}. There must be at least one input symbol which, when applied to $M|\sigma_i$ and $M|\sigma_j$, yields distinct output symbols. By definition \ref{labelEquivalence}, then $\sigma_i \neq \sigma_j$.
 
 
-    \lemma Let $\sigma_i$ and $\sigma_j$ be states of machine M. If rows $\sigma_i$ and $\sigma_j$, spanning the entire transition table of M, are identical, then $\sigma_i = \sigma_j$.
+    \lemma \label{labelSimplyEquiv} Let $\sigma_i$ and $\sigma_j$ be states of machine M. If rows $\sigma_i$ and $\sigma_j$, spanning the entire transition table of M, are identical, then $\sigma_i = \sigma_j$.
 
     \emph{Proof}. When any input symbol is applied to $M_1|\sigma_i$ and $M_2|\sigma_j$, the output symbols and next states are identical in the two alternatives. Once $M_1|\sigma_i$ and $M_2|\sigma_j$ pass into the same state, their responses to all subsequent excitations must coincide. By definition \ref{labelEquivalence}, then, $\sigma_i = \sigma_j$.
 
-    \lemma Let $\sigma_i$ and $\sigma_j$ be states of machine M. If rows $\sigma_i$ and $\sigma_j$, spanning the entire transition table of M, become identical when every $\sigma_i$ is replaced by $\sigma_j$ (or every $\sigma_j$ is replaced by $\sigma_i$), then $\sigma_i = \sigma_j$.
+    \lemma \label{labelSimplyModifiedEquiv} Let $\sigma_i$ and $\sigma_j$ be states of machine M. If rows $\sigma_i$ and $\sigma_j$, spanning the entire transition table of M, become identical when every $\sigma_i$ is replaced by $\sigma_j$ (or every $\sigma_j$ is replaced by $\sigma_i$), then $\sigma_i = \sigma_j$.
 
     \emph{Proof}. When any input symbol is applied to $M|\sigma_i$ and $M|\sigma_j$, the output symbols are identical in the two alternatives. $M|\sigma_i$ and $M|\sigma_j$ either pass into the same state or into states $\sigma_i$ and $\sigma_j$ (not necessarily respectively). If the next state is the same, their responses to all subsequent excitations must coincide. If the next states are $\sigma_i$ and $\sigma_j$, the original situation is restored and the above argument can be repeated to show that the next output symbols are identical in the two alternatives. By induction, then, the responses of $\sigma_i$ and $\sigma_j$ to any input sequence are identical, which implies that $\sigma_i = \sigma_j$.
+
+    Pairs of rows which exhibit the property cited in Lemma \ref{labelSimplyDistinct} are said to be \emph{simply distinguishable}, and states in the stub of these rows are called simply distinguishable states. Pairs of rows which exhibit the property cited in Lemma \ref{labelSimplyEquiv} or Lemma \ref{labelSimplyModifiedEquiv} are said to be \emph{simply equivalent}, and the states in the stub of these rows are called simply equivalent states.
+    We thus have:
+
+    \theorem \label{labelSimplyTheorem} If $\sigma_i$ and $\sigma_j$ are simply distinguishable, then $\sigma_i \neq \sigma_j $. If $\sigma_i$ and $\sigma_j$ are simply equivalent, then $\sigma_i = \sigma_j $.
+
+    % TODO: introduzir as definicoes de classe da Sec. 2.3
+    It should be pointed out that the converse of Theorem \ref{labelSimplyTheorem} is not true: not every distinguishable pair of states is simply distinguishable, and not every equivalent pair of states is simply equivalent. Using the class definitions introduced in Sec. 2.3, it can be concluded that in a simply minimal machine all pairs of states are distinguishable and in a simply reducible machine at least one pair of states is equivalent.
+
+    %TODO: adicionar machine A6 e trocar referencias
+    To illustrate Lemmas \ref{labelSimplyDistinct} to \ref{labelSimplyModifiedEquiv}, consider machine 
 
 \end{document}

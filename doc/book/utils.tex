@@ -13,3 +13,14 @@
     \refstepcounter{lemmaNumber}
     Lemma \arabic{chapter}.\arabic{lemmaNumber}.
 }
+
+\newcounter{theoremNumber}
+\renewcommand*\thetheoremNumber{\thechapter.\arabic{theoremNumber}}
+
+\newcommand{\theorem}{
+    \refstepcounter{theoremNumber}
+    Theorem \arabic{chapter}.\arabic{theoremNumber}.
+}
+
+
+
