@@ -22,5 +22,12 @@
     Theorem \arabic{chapter}.\arabic{theoremNumber}.
 }
 
+\newcounter{machineNumber}
+\setcounter{machineNumber}{5}
+\renewcommand*\themachineNumber{A\arabic{machineNumber}}
 
-
+\newcommand{\captionSampleMachine}
+{
+    \refstepcounter{machineNumber}
+    \caption{Machine A\arabic{machineNumber}}
+}

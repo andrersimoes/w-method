@@ -6,4 +6,4 @@ all:
 	$(TEX) $(SRC).tex
 
 clean:
-	rm -f *.log *.aux
+	rm -f *.log *.aux *.dvi

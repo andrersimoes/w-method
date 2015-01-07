@@ -1,5 +1,7 @@
 \documentclass[a4paper]{report}
 
+\usepackage{graphicx}
+
 \input{utils}
 
 \begin{document}
@@ -44,7 +46,15 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
     % TODO: introduzir as definicoes de classe da Sec. 2.3
     It should be pointed out that the converse of Theorem \ref{labelSimplyTheorem} is not true: not every distinguishable pair of states is simply distinguishable, and not every equivalent pair of states is simply equivalent. Using the class definitions introduced in Sec. 2.3, it can be concluded that in a simply minimal machine all pairs of states are distinguishable and in a simply reducible machine at least one pair of states is equivalent.
 
+    \begin{figure}[!t]
+        \centering
+        \includegraphics[width=256pt,clip]{images/eps/machineA6}
+        \captionSampleMachine
+        \label{fig:machineA6}
+    \end{figure}
+
+
     %TODO: adicionar machine A6 e trocar referencias
-    To illustrate Lemmas \ref{labelSimplyDistinct} to \ref{labelSimplyModifiedEquiv}, consider machine 
+    To illustrate Lemmas \ref{labelSimplyDistinct} to \ref{labelSimplyModifiedEquiv}, consider figure \ref{fig:machineA6}, specified by 
 
 \end{document}
