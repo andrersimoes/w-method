@@ -1,6 +1,9 @@
 \documentclass[a4paper]{report}
 
 \usepackage{graphicx}
+\usepackage{slashbox}
+\usepackage{paralist}
+\usepackage{upgreek}
 
 \input{utils}
 
@@ -8,10 +11,12 @@
 
 \chapter{Equivalence and Machine Minimization}
 \section{Introduction}
+\label{labelIntroduction}
 
 In the preceding chapters it was emphasized that the state of a finite-state machine need not be observable or even physical quantitites, and that their only function is to assist in the formulation of the input-output relationships of the machine. Consequently, any state set which fulfills this function is a satisfactory set, regardless of whether the state convey any intuitive meaning or not. This freedom inherent in the choice of a state set is quite advantageous, since it permits the replacement of one set with another set which may be considered more convenient for various purposes. More specifically, it permits one to carry out operations aiming at producing a state set which is ``optimal'' or ``minimal'' in one sense or another. In all these considerations the concept of ``equivalence'' plays a major role. As will become apparent in this and later chapters, this concept not only paves the way for more precise and more concise formulation of finite-state machines, but sheds new light on the entire problem of machine analysis (as well as synthesis).
 
 \section{State Equivalence}
+\label{sectionStateEquivalence}
 
 In what follows, the notation $ M |\sigma $ will be used as an abbreviation for the phrase ``machine M in state $\sigma$''.
 
@@ -46,15 +51,72 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
     % TODO: introduzir as definicoes de classe da Sec. 2.3
     It should be pointed out that the converse of Theorem \ref{labelSimplyTheorem} is not true: not every distinguishable pair of states is simply distinguishable, and not every equivalent pair of states is simply equivalent. Using the class definitions introduced in Sec. 2.3, it can be concluded that in a simply minimal machine all pairs of states are distinguishable and in a simply reducible machine at least one pair of states is equivalent.
 
+    \incSampleMachine
+    \label{labelMachine6}
     \begin{figure}[!t]
         \centering
         \includegraphics[width=256pt,clip]{images/eps/machineA6}
-        \captionSampleMachine
+        \caption{Machine \sampleMachine}
         \label{fig:machineA6}
     \end{figure}
 
 
-    %TODO: adicionar machine A6 e trocar referencias
-    To illustrate Lemmas \ref{labelSimplyDistinct} to \ref{labelSimplyModifiedEquiv}, consider figure \ref{fig:machineA6}, specified by 
+    To illustrate Lemmas \ref{labelSimplyDistinct} to \ref{labelSimplyModifiedEquiv}, consider machine \sampleMachine \label{labelMachineA6}, specified by Fig. \ref{fig:machineA6} and Table \ref{table:transitionA6}. It can be noted that rows 1 and 5 in the transition table are identical and that rows 2 and 6 become identical when every ``2'' is replaced by ``6'' (or every ``6'' is replaced by ``2''). Consequently, each of the state pairs \{1,5\} and \{2,6\} is equivalent. A glance at the $z_\nu$ subtable of \ref{labelMachineA6} reveals that no state in the set \{1,4,5,8\} can be equivalent to any state in the set \{2,3,6,7\}.
+
+    \begin{table}
+        \caption{Machine \sampleMachine}
+        \label{table:transitionA6}
+        \hfill\\
+        \centering
+        \begin{tabular}{ c || c | c | c || c | c | c }
+            \hline
+            & \multicolumn{3}{ |c|| }{ $z_\nu $ } & \multicolumn{3}{ |c }{ $s_{\nu+1}$ } \\
+            \hline
+            \backslashbox{$s_\nu$}{$x_\nu$} & $\alpha$ & $\beta$ & $\gamma$ & $\alpha$ & $\beta$ & $\gamma$ \\
+            \hline
+            1 & 1 & 0 & 1 & 2 & 5 & 5 \\
+            2 & 0 & 1 & 1 & 6 & 2 & 5 \\
+            3 & 0 & 1 & 1 & 2 & 2 & 7 \\
+            4 & 1 & 0 & 1 & 8 & 3 & 1 \\
+            5 & 1 & 0 & 1 & 2 & 5 & 5 \\
+            6 & 0 & 1 & 1 & 2 & 6 & 5 \\
+            7 & 0 & 1 & 1 & 6 & 6 & 3 \\
+            8 & 1 & 0 & 1 & 8 & 7 & 5 \\
+            \hline
+        \end{tabular}
+    \end{table}
+
+\section{\emph{k}-equivalence}
+
+    A notion which will be found useful in further discussions is that of ``\emph{k}-equivalence'':
+
+    \definition \label{labelDefEquivK} State $\sigma_i$ of machine $M_1$ and state $\sigma_j$ of machine $M_2$ are said to be \emph{k}-equivalent, if $M_1|\sigma_i$ and $M_2|\sigma_j$, when excited by an input sequence of length \emph{k}, yield identical output sequences. If $\sigma_i$ and $\sigma_j$ are not \emph{k}-equivalent, they are said to be \emph{k}-distinguishable. $M_1$ and $M_2$ may refer to the same machine.
+
+    Thus, $\sigma_i$ and $\sigma_j$ are \emph{k}-equivalent if and only if there is no way of distinguishing, by using input sequences of length \emph{k} and by observing the external terminals, between machine $M_1$ at state $\sigma_i$ and machine $M_2$ at state $\sigma_j$. $\sigma_i$ and $\sigma_j$ are \emph{k}-distinguishable if and only if there is at least one input sequence of length \emph{k} which, when applied to both $M_1|\sigma_i$ and $M_2|\sigma_j$, yields different output sequences. Two states which are 1-distinguishable are seen to be simply distinguishable, as defined in Sec. \ref{sectionStateEquivalence}.
+
+    From definition \ref{labelDefEquivK} it can be readily verified that \emph{k}-equivalence obeys the reflexive, symmetric, and transitive laws. Consequently, \emph{k}-equivalence can be treated as ordinary equivalence relation and applied directly to sets of states of any size. \emph{k}-distinguishability, on the other hand, does not obey the reflexive and transitive laws, and hence can be applied only to pairs of states.
+
+    \lemma \label{labelDefEquivLemma} \begin{inparaenum}[a)]
+        \item If two states are \emph{k}-equivalent, then they are \emph{l}-equivalent for every $ l \leq k $.
+        \item If two states are \emph{k}-distinguishable, then they are \emph{l}-distinguishable for every $ l \geq k $
+    \end{inparaenum}
+
+    \emph{Proof}. \begin{inparaenum}[a)] 
+        \item Suppose $ \sigma_i $ and $ \sigma_j $ are \emph{k}-equivalent but distinguishable by some input sequence, say $ \upvarepsilon_l $, of length $ l \leq k $. Then $ \sigma_i $ and $ \sigma_j $ must be distinguishable by the input sequence $ \upvarepsilon_l \upvarepsilon_{k-l} $ where $ \upvarepsilon_{k-l} $ is any input sequence of length $k - l$. Hence, $ \sigma_i $ and $ \sigma_j $ are \emph{k}-distinguishable, which is a contradiction. 
+        \item Suppose $ \sigma_i $ and $ \sigma_j $ are \emph{k}-distinguishable but l-equivalent for some $ l \geq k $. By part \emph{a}, however, if $ \sigma_i $ and $ \sigma_j $ are \emph{l}-equivalent, they must be \emph{k}-equivalent for every $ k \leq l$. By contradiction, then, part \emph{b}, follows.
+    \end{inparaenum}
+
+    The state into which state $ \sigma_i $ passes when input sequence of length \emph{k} is applied is called the \emph{kth successor} of $ \sigma_i $ with respect to this sequence. The zeroth successor of a state is the state itself.
+
+    \theorem If states $ \sigma_i $ and $ \sigma_j $ are \emph{k}-equivalent, and if their \emph{k}th successors with respect to any input sequence of length \emph{k} are equivalent, then $\sigma_i = \sigma_j$.
+
+    \emph{Proof}. If $\sigma_i$ and $\sigma_j$ are \emph{k}-equivalent, then, by Lemma \ref{labelDefEquivLemma}, they yield identical responses to all input sequences of length \emph{k} or less. If their \emph{k}th successors, with respect to any input sequence of length \emph{k}, are equivalent, then they yield identical responses to all input sequences which follow the first \emph{k} symbols. Hence, $ \sigma_i $ and $ \sigma_j $ yield identical responses to input sequences of \emph{any} length, which implies that $\sigma_i = \sigma_j$
+
+    \theorem If states $ \sigma_i $ and $ \sigma_j $ are equivalent, then their \emph{k}th successor, with respect to any input sequence of length \emph{k} and for any \emph{k}, are equivalent.
+
+    \emph{Proof} Let $ \sigma^{'}_i$ and  $ \sigma^{'}_j$ denote the \emph{k}th successors of $\sigma_i$ and $\sigma_j$, respectively, with respect to an arbitrary input sequence $\upvarepsilon_k$. If $ \sigma^{'}_i \neq \sigma^{'}_j $, then there is a sequence, say $\upvarepsilon_l$, for which $ \sigma^{'}_i $ and $ \sigma^{'}_j $ yield different responses. Hence, the responses of $\sigma_i$ and $\sigma_j$ to $\upvarepsilon_k\upvarepsilon_l$ must be different, which contradicts the assumption that $ \sigma_i = \sigma_j $.
+
+    An input sequence applied to both $M_1|\sigma_i$ and $M_2|\sigma_j$ may be associated with a pair of paths originating in states $\sigma_i$ and $\sigma_j$ in the transition diagram of $M_1$ and $M_2$ respectively.
+
 
 \end{document}

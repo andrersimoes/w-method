@@ -25,9 +25,5 @@
 \newcounter{machineNumber}
 \setcounter{machineNumber}{5}
 \renewcommand*\themachineNumber{A\arabic{machineNumber}}
-
-\newcommand{\captionSampleMachine}
-{
-    \refstepcounter{machineNumber}
-    \caption{Machine A\arabic{machineNumber}}
-}
+\newcommand{\incSampleMachine}{ \refstepcounter{machineNumber} }
+\newcommand{\sampleMachine}{A\arabic{machineNumber}}
