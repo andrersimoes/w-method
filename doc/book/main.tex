@@ -52,7 +52,6 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
     It should be pointed out that the converse of Theorem \ref{labelSimplyTheorem} is not true: not every distinguishable pair of states is simply distinguishable, and not every equivalent pair of states is simply equivalent. Using the class definitions introduced in Sec. 2.3, it can be concluded that in a simply minimal machine all pairs of states are distinguishable and in a simply reducible machine at least one pair of states is equivalent.
 
     \incSampleMachine
-    \label{labelMachine6}
     \begin{figure}[!t]
         \centering
         \includegraphics[width=256pt,clip]{images/eps/machineA6}
@@ -112,11 +111,27 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
 
     \emph{Proof}. If $\sigma_i$ and $\sigma_j$ are \emph{k}-equivalent, then, by Lemma \ref{labelDefEquivLemma}, they yield identical responses to all input sequences of length \emph{k} or less. If their \emph{k}th successors, with respect to any input sequence of length \emph{k}, are equivalent, then they yield identical responses to all input sequences which follow the first \emph{k} symbols. Hence, $ \sigma_i $ and $ \sigma_j $ yield identical responses to input sequences of \emph{any} length, which implies that $\sigma_i = \sigma_j$
 
-    \theorem If states $ \sigma_i $ and $ \sigma_j $ are equivalent, then their \emph{k}th successor, with respect to any input sequence of length \emph{k} and for any \emph{k}, are equivalent.
+    \theorem \label{labelBelowKEquiv} If states $ \sigma_i $ and $ \sigma_j $ are equivalent, then their \emph{k}th successor, with respect to any input sequence of length \emph{k} and for any \emph{k}, are equivalent.
 
     \emph{Proof} Let $ \sigma^{'}_i$ and  $ \sigma^{'}_j$ denote the \emph{k}th successors of $\sigma_i$ and $\sigma_j$, respectively, with respect to an arbitrary input sequence $\upvarepsilon_k$. If $ \sigma^{'}_i \neq \sigma^{'}_j $, then there is a sequence, say $\upvarepsilon_l$, for which $ \sigma^{'}_i $ and $ \sigma^{'}_j $ yield different responses. Hence, the responses of $\sigma_i$ and $\sigma_j$ to $\upvarepsilon_k\upvarepsilon_l$ must be different, which contradicts the assumption that $ \sigma_i = \sigma_j $.
 
-    An input sequence applied to both $M_1|\sigma_i$ and $M_2|\sigma_j$ may be associated with a pair of paths originating in states $\sigma_i$ and $\sigma_j$ in the transition diagram of $M_1$ and $M_2$ respectively.
+    \begin{figure}[!t]
+        \centering
+        \includegraphics[width=256pt,clip]{images/eps/pathsThroughM1AndM2}
+        \caption{Paths traversed in $M_1$ and $M_2$ when $\sigma_i = \sigma_j$ }
+        \label{fig:kEquivalenceTraversal}
+    \end{figure}
+
+    An input sequence applied to both $M_1|\sigma_i$ and $M_2|\sigma_j$ may be associated with a pair of paths originating in states $\sigma_i$ and $\sigma_j$ in the transition diagram of $M_1$ and $M_2$ respectively. Theorem \ref{labelBelowKEquiv} implies that if the pair of initial states in these paths is equivalent, then every pair of corresponding states in the paths (i.e., states reached from the initial states after the traversal of the same number of branches) is also equivalent. This situation is illustrated in Fig. \ref{fig:kEquivalenceTraversal}, where the shown paths are the paths traversed in $M_1$ and $M_2$ when a certain input sequence is applied to $M_1|\sigma_i$ and $M_2|\sigma_j$. If $\sigma_i$ and $\sigma_j$ are equivalent, then the \emph{k}th successors $\sigma_{i_{k}}$ and $\sigma_{j_{k}}$ must be equivalent for all \emph{k}.
+
+    The preceding results can be used, in many cases, to establish equivalence of states when the equivalence of other states is already established. Suppose, for example, that the pairs of states \{1,5\} and \{3,7\} in machine \ref{labelMachineA6} of Fig. \ref{fig:machineA6} are known to be equivalent. Consequently, the pair \{4,8\} must be equivalent, since 4 and 8 are 1-equivalent, with the pairs \{1,5\} and \{3,7\} being their first successors. If the pair \{4,8\} is known to be equivalent, then the pairs \{1,5\}, \{2,6\} and \{3,7\} must also be equivalent, since they constitute pairs of corresponding states in paths originating in states 4 and 8.
+
+\section{\emph{k}-equivalence Partitions}
+
+    For purposes which will become apparent in latter sections, it is of interest to divide, or ``partition'', the states of a machine into classes according to the following criteria: \begin{inparaenum}
+    \item All states which belong to the same class must be \emph{k}-equivalent.
+    \item All states which belong to different classes must be \emph{k}-distinguishable.
+    \end{inparaenum} This partition is called the \emph{k-equivalence partition} of the machine and is denoted by $P_k$. The classes of $P_k$ are called \emph{k-equivalence classes} and are denoted by $\Sigma_{k1},\Sigma_{k2},\Sigma_{k3}$, etc. States belonging to the same class are called \emph{adjoint states}; states belonging to different classes are called \emph{disjoint states}.
 
 
 \end{document}
