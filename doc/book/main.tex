@@ -4,6 +4,7 @@
 \usepackage{slashbox}
 \usepackage{paralist}
 \usepackage{upgreek}
+\usepackage{amsmath}
 
 \input{utils}
 
@@ -52,9 +53,9 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
     It should be pointed out that the converse of Theorem \ref{labelSimplyTheorem} is not true: not every distinguishable pair of states is simply distinguishable, and not every equivalent pair of states is simply equivalent. Using the class definitions introduced in Sec. 2.3, it can be concluded that in a simply minimal machine all pairs of states are distinguishable and in a simply reducible machine at least one pair of states is equivalent.
 
     \incSampleMachine
-    \begin{figure}[!t]
+    \begin{figure}[!h]
         \centering
-        \includegraphics[width=256pt,clip]{images/eps/machineA6}
+        \includegraphics[width=312pt,clip]{images/eps/machineA6}
         \caption{Machine \sampleMachine}
         \label{fig:machineA6}
     \end{figure}
@@ -115,7 +116,7 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
 
     \emph{Proof} Let $ \sigma^{'}_i$ and  $ \sigma^{'}_j$ denote the \emph{k}th successors of $\sigma_i$ and $\sigma_j$, respectively, with respect to an arbitrary input sequence $\upvarepsilon_k$. If $ \sigma^{'}_i \neq \sigma^{'}_j $, then there is a sequence, say $\upvarepsilon_l$, for which $ \sigma^{'}_i $ and $ \sigma^{'}_j $ yield different responses. Hence, the responses of $\sigma_i$ and $\sigma_j$ to $\upvarepsilon_k\upvarepsilon_l$ must be different, which contradicts the assumption that $ \sigma_i = \sigma_j $.
 
-    \begin{figure}[!t]
+    \begin{figure}[!h]
         \centering
         \includegraphics[width=256pt,clip]{images/eps/pathsThroughM1AndM2}
         \caption{Paths traversed in $M_1$ and $M_2$ when $\sigma_i = \sigma_j$ }
@@ -133,5 +134,70 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
     \item All states which belong to different classes must be \emph{k}-distinguishable.
     \end{inparaenum} This partition is called the \emph{k-equivalence partition} of the machine and is denoted by $P_k$. The classes of $P_k$ are called \emph{k-equivalence classes} and are denoted by $\Sigma_{k1},\Sigma_{k2},\Sigma_{k3}$, etc. States belonging to the same class are called \emph{adjoint states}; states belonging to different classes are called \emph{disjoint states}.
 
+    \incSampleMachine
+    \begin{figure}[!h]
+        \centering
+        \includegraphics[width=312pt,clip]{images/eps/machineA7}
+        \caption{Machine \sampleMachine}
+        \label{fig:machineA7}
+    \end{figure}
+
+    Figure \ref{fig:machineA7} and Table \ref{table:transitionA7} represent machine \sampleMachine \label{labelMachineA7}. For this machine, the 2-equivalence partition table is given by:
+
+    \begin{align} \label{labelEq2A7}
+        {P_2:} \quad{} &\Sigma_{21} = \{1,3,5,7,8\} \nonumber \\
+        &\Sigma_{22} = \{2,4,6\} \nonumber \\
+        &\Sigma_{23} = \{9\}
+    \end{align}
+
+    As can be readily verified through the transition diagram of \ref{labelMachineA7}, adjoint states in $P_2$, as given by (\ref{labelEq2A7}), are 2-equivalent, and disjoint states are 2-distinguishable. No state in \ref{labelMachineA7} is 2-equivalent to state 9 (except state 9 itself), and hence 9 constitutes a single-state class, or a \emph{singleton}.
+
+    Clearly, no state can belong to two different \emph{k}-equivalence classes simultaneously, since this would imply that the state is \emph{k}-distinguishable with respect to itself. Hence, the total number of states in $P_k$ equals the total number of states in the machine.
+
+    \begin{table}[!h]
+        \caption{Machine \sampleMachine}
+        \label{table:transitionA7}
+        \hfill\\
+        \centering
+        \begin{tabular}{ c || c | c | c || c | c | c }
+            \hline
+            & \multicolumn{3}{ |c|| }{ $z_\nu $ } & \multicolumn{3}{ |c }{ $s_{\nu+1}$ } \\
+            \hline
+            \backslashbox{$s_\nu$}{$x_\nu$} & $\alpha$ & $\beta$ & $\gamma$ & $\alpha$ & $\beta$ & $\gamma$ \\
+            \hline
+            1 & 1 & 0 & 0 & 2 & 2 & 5 \\
+            2 & 0 & 1 & 1 & 1 & 4 & 4 \\
+            3 & 1 & 0 & 0 & 2 & 2 & 5 \\
+            4 & 0 & 1 & 1 & 3 & 2 & 2 \\
+            5 & 1 & 0 & 0 & 6 & 4 & 3 \\
+            6 & 0 & 1 & 1 & 8 & 9 & 6 \\
+            7 & 1 & 0 & 0 & 6 & 2 & 8 \\
+            8 & 1 & 0 & 0 & 4 & 4 & 7 \\
+            9 & 0 & 1 & 1 & 7 & 9 & 7 \\
+            \hline
+        \end{tabular}
+    \end{table}
+
+    \lemma The \emph{k}-equivalence partition of a machine is unique.
+    \emph{Proof}. Suppose $P_k$, consisting of $\Sigma_{k1}, \Sigma_{k2}, ..., \Sigma_{ku}$, is not unique. Then there must be another \emph{k}-equivalence partition, say $ P^{'}_k$, consisting of $\Sigma^{'}_{k1}, \Sigma^{'}_{k2}, ..., \Sigma^{'}_{kv}$ for the same machine. Let $\Sigma_{kr} = \{\sigma_{r1}, \sigma_{r2}, ..., \sigma_{rd}  \}  $. Since the states of $\Sigma_{kr}$ are \emph{k}-equivalent, and since there is no state outside $\Sigma_{kr}$ which is equivalent to any state in $\Sigma_{kr}$, there must be a class in $P^{'}_k$, say $\Sigma^{'}_{ks}$ which consists of the states $\sigma_{r1}, \sigma_{r2}, ..., \sigma_{rd}$ and no other states. Applying this argument to $ r = 1,2,...,u $, it follows that to every class in $P_k$ there corresponds an identical class in $ P^{'}_k$. Since the total number of states in $P^{'}_k$ must be the same as that in $P_k$, $P_k$ and $P^{'}_k$ must be identical, and hence $P_k$ is unique.
+
+    \lemma States which are disjoint in $P_k$ must also be disjoint in $P_{k+1}$.
+
+    \emph{Proof}. From Lemma \ref{labelDefEquivLemma}, if two states are \emph{k}-distinguishable, they must also be $(\emph{k} + 1)$-distinguishable. The present lemma, then, follows immediately from the definition of $P_k$ and $P_{k+1}$.
+
+    As an example, $P_3$ of machine \ref{labelMachineA7} cannot contain classes such as \{1,3,6\} or \{2,5,9\}, since these classes, as can be deduced from (\ref{labelEq2A7}) contain states which are disjoint in $P_2$.
+
+    \lemma \label{labelKPlusOneDistinguishable} If machine $M$ contains two distinguishable states which are \emph{k}-equivalent, then it must also contain two states which are \emph{k}-equivalent but $(\emph{k}+1)$-distinguishable.
+
+    \emph{Proof}. Let $\sigma_i$ and $\sigma_j$ be the distinguishable states of $M$ which are \emph{k}-equivalent, and let the input sequence $ \xi_{h_{1}}, \xi_{h_{2}}, ..., \xi_{h_{l}} $ be the shortest input sequence which distinguishes between $ \sigma_i $ and $ \sigma_j $. $ \sigma_i $ and $ \sigma_j $, then, yield distinct output symbols when $ \xi_{h_{l}} $ is applied, but not before. Since $ \sigma_i $  and $ \sigma_j $ are \emph{k}-equivalent, we must have $ l > k $. Let the $(\emph{l-k}-1)$st successors of $\sigma_i$ and $\sigma_j$ with respect to $ \xi_{h_{1}} \xi_{h_{2}} ... \xi_{h_{l-k-1}} $ be $\sigma^{'}_i$ and $\sigma^{'}_j$, respectively; since $ l > k, l-k-1 \geq 0 $ and these successors always exist. $\sigma^{'}_i$ and $ \sigma^{'}_j$ then, can be distinguished by the input sequence $ \xi_{h_{l-k}}  \xi_{h_{l-k + 1 }  } ... \xi_{h_{l}} $ whose length is $ l - (l-k-1) = k + 1$. They cannot be distinguished by any shorter sequence, since this would contradict the assumption that $ \sigma_i $ and $\sigma_j$ are \emph{k}-equivalent. Hence, $\sigma^{'}_i$ and $\sigma^{'}_j$ are \emph{k}-equivalent but $(\emph{k}+1)$-distinguishable, which proves the theorem. The above situation is illustrated in Fig. \ref{fig:kPlusOneDistinguishable}.
+
+    \begin{figure}[!h]
+        \centering
+        \includegraphics[width=256pt,clip]{images/eps/kPlusOneDistinguishablePath}
+        \caption{Illustration for Lemma \ref{labelKPlusOneDistinguishable} }
+        \label{fig:kPlusOneDistinguishable}
+    \end{figure}
+
+    Suppose now that the adjoint states in each equivalence class of $P_k$ are equivalent. Then, clearly, $P_{k+u}$ is identical with $P_k$ for all nonnegative integers \emph{u}. If two adjoint states in $P_k$ are distinguishable, then they constitute two distinguishable states which are \emph{k}-equivalent. In this case, by Lemma \ref{labelKPlusOneDistinguishable} , the machine must contain two states which are \emph{k}-equivalent but $(\emph{k}+1)$-distinguishable. Hence, $P_k$ must contain two adjoint states which become disjoint in $P_{k+1}$. Thus, if the adjoint states in any class of $P_k$ are distinguishable, $P_{k+1}$ must differ from $P_{k}$. 
 
 \end{document}
