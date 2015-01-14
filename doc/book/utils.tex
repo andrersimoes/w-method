@@ -22,6 +22,14 @@
     Theorem \arabic{chapter}.\arabic{theoremNumber}.
 }
 
+\newcounter{corollaryNumber}
+\renewcommand*\thecorollaryNumber{\thechapter.\arabic{corollaryNumber}}
+
+\newcommand{\corollary}{
+    \refstepcounter{corollaryNumber}
+    Corollary \arabic{chapter}.\arabic{corollaryNumber}.
+}
+
 \newcounter{machineNumber}
 \setcounter{machineNumber}{5}
 \renewcommand*\themachineNumber{A\arabic{machineNumber}}
