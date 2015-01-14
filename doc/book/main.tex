@@ -128,6 +128,7 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
     The preceding results can be used, in many cases, to establish equivalence of states when the equivalence of other states is already established. Suppose, for example, that the pairs of states \{1,5\} and \{3,7\} in machine \ref{labelMachineA6} of Fig. \ref{fig:machineA6} are known to be equivalent. Consequently, the pair \{4,8\} must be equivalent, since 4 and 8 are 1-equivalent, with the pairs \{1,5\} and \{3,7\} being their first successors. If the pair \{4,8\} is known to be equivalent, then the pairs \{1,5\}, \{2,6\} and \{3,7\} must also be equivalent, since they constitute pairs of corresponding states in paths originating in states 4 and 8.
 
 \section{\emph{k}-equivalence Partitions}
+\label{labelSectionEquivalenceK}
 
     For purposes which will become apparent in latter sections, it is of interest to divide, or ``partition'', the states of a machine into classes according to the following criteria: \begin{inparaenum}
     \item All states which belong to the same class must be \emph{k}-equivalent.
@@ -181,7 +182,7 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
     \lemma The \emph{k}-equivalence partition of a machine is unique.
     \emph{Proof}. Suppose $P_k$, consisting of $\Sigma_{k1}, \Sigma_{k2}, ..., \Sigma_{ku}$, is not unique. Then there must be another \emph{k}-equivalence partition, say $ P^{'}_k$, consisting of $\Sigma^{'}_{k1}, \Sigma^{'}_{k2}, ..., \Sigma^{'}_{kv}$ for the same machine. Let $\Sigma_{kr} = \{\sigma_{r1}, \sigma_{r2}, ..., \sigma_{rd}  \}  $. Since the states of $\Sigma_{kr}$ are \emph{k}-equivalent, and since there is no state outside $\Sigma_{kr}$ which is equivalent to any state in $\Sigma_{kr}$, there must be a class in $P^{'}_k$, say $\Sigma^{'}_{ks}$ which consists of the states $\sigma_{r1}, \sigma_{r2}, ..., \sigma_{rd}$ and no other states. Applying this argument to $ r = 1,2,...,u $, it follows that to every class in $P_k$ there corresponds an identical class in $ P^{'}_k$. Since the total number of states in $P^{'}_k$ must be the same as that in $P_k$, $P_k$ and $P^{'}_k$ must be identical, and hence $P_k$ is unique.
 
-    \lemma States which are disjoint in $P_k$ must also be disjoint in $P_{k+1}$.
+    \lemma \label{labelkPlusOneDistinct} States which are disjoint in $P_k$ must also be disjoint in $P_{k+1}$.
 
     \emph{Proof}. From Lemma \ref{labelDefEquivLemma}, if two states are \emph{k}-distinguishable, they must also be $(\emph{k} + 1)$-distinguishable. The present lemma, then, follows immediately from the definition of $P_k$ and $P_{k+1}$.
 
@@ -198,6 +199,65 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
         \label{fig:kPlusOneDistinguishable}
     \end{figure}
 
-    Suppose now that the adjoint states in each equivalence class of $P_k$ are equivalent. Then, clearly, $P_{k+u}$ is identical with $P_k$ for all nonnegative integers \emph{u}. If two adjoint states in $P_k$ are distinguishable, then they constitute two distinguishable states which are \emph{k}-equivalent. In this case, by Lemma \ref{labelKPlusOneDistinguishable} , the machine must contain two states which are \emph{k}-equivalent but $(\emph{k}+1)$-distinguishable. Hence, $P_k$ must contain two adjoint states which become disjoint in $P_{k+1}$. Thus, if the adjoint states in any class of $P_k$ are distinguishable, $P_{k+1}$ must differ from $P_{k}$. 
+    Suppose now that the adjoint states in each equivalence class of $P_k$ are equivalent. Then, clearly, $P_{k+u}$ is identical with $P_k$ for all nonnegative integers \emph{u}. If two adjoint states in $P_k$ are distinguishable, then they constitute two distinguishable states which are \emph{k}-equivalent. In this case, by Lemma \ref{labelKPlusOneDistinguishable} , the machine must contain two states which are \emph{k}-equivalent but $(\emph{k}+1)$-distinguishable. Hence, $P_k$ must contain two adjoint states which become disjoint in $P_{k+1}$. Thus, if the adjoint states in any class of $P_k$ are distinguishable, $P_{k+1}$ must differ from $P_{k}$. By Lemma \ref{labelkPlusOneDistinct}, if $P_{k+1}$ differs from $P_k$, it must be a ``proper refinement'' of $P_k$, that is, it must be obtainable by splitting one or more classes of $P_k$ into two or more subclasses. In conclusion, the following can be stated:
+
+    \theorem \label{labelRefinement} $P_{k+1}$ must be a proper refinement of $P_k$, unless the adjoing states in every class of $P_k$ are equivalent, in which case $P_k$ and $P_{k+1}$ are identical.
+
+    For machine \ref{labelMachineA7}, for example, we have
+    \begin{align} \label{labelEq3A7}
+        {P_3:} \quad{} &\Sigma_{31} = \{1,3,5,7,8\} \nonumber \\
+        &\Sigma_{32} = \{2,4\} \\
+        &\Sigma_{33} = \{6\} \nonumber \\
+        &\Sigma_{34} = \{9\} \nonumber
+    \end{align}
+    which is a proper refinement of $P_2$, and
+    \begin{align} \label{labelEq4A7}
+        {P_4:} \quad{} &\Sigma_{41} = \{1,3,8\} \nonumber \\
+        &\Sigma_{42} = \{2,4\} \nonumber \\
+        &\Sigma_{43} = \{5,7\} \\
+        &\Sigma_{44} = \{6\} \nonumber \\
+        &\Sigma_{45} = \{9\} \nonumber
+    \end{align}
+    which is a proper refinement of $P_3$, However,
+    \begin{align} \label{labelEq5A7}
+        {P_5:} \quad{} &\Sigma_{51} = \{1,3,8\} \nonumber \\
+        &\Sigma_{52} = \{2,4\} \nonumber \\
+        &\Sigma_{53} = \{5,7\} \\
+        &\Sigma_{54} = \{6\} \nonumber \\
+        &\Sigma_{55} = \{9\} \nonumber
+    \end{align}
+    is seen to be identical do $P_4$, and hence the adjoint states in every class of $P_4$ are equivalent.
+
+\section{Equivalence Partitions}
+
+A \emph{k}-equivalence partition for machine $M$ is called an \emph{equivalence partition} of $M$, and denoted by $ \widehat{P} $, if the adjoint states in every class of this partition are equivalent. Under these conditions, each class in the partition is called an \emph{equivalence class}. From the discussion in \ref{labelSectionEquivalenceK} it follows that $ \widehat{P} $ is the most refined $P_k$ partition. By Theorem \ref{labelRefinement}, $ \widehat{P} $ can be obtained by constructing $P_k$ for $ \emph{k} = 1,2,3...$, until, for the first time, a partition is produced which is identical to the one previously produced; this partition is $ \widehat{P} $. Let $P_i = P_j $ signify the fact that $P_i$ and $P_j$ are identical partitions, and let $|P_i|$ denote the number of classes in $P_i$. Using this notation, the preceding results can be summarized as follows:
+
+\begin{equation} \label{labelEqRefinement}
+    |P_k| \leq |P_{k+1} |
+\end{equation}
+    If $|P_k| = |P_{k+1}|$, then
+\begin{equation} \label{labelEqMostRefined}
+    P_k = P_{k+u} = \widehat{P} \qquad{} u = 0, 1, 2, ...
+\end{equation}
+
+% TODO: adicionar definição introduzida na seção 1.6 e alterar referencia no paragrafo abaixo
+
+If all the states in a given \emph{n}-state machine are 1-equivalent, $P_1$ consists of a single class containing \emph{n} states. Clearly, if all \emph{n} states are 1-equivalent, their first successors, with respect to any input sequence, are also 1-equivalent. Consequently, all \emph{n} states must be 2-equivalent, and hence $P_1 = P_2$. By (\ref{labelEqMostRefined}), then, $P_1 = \widehat{P}$, and all \emph{n} states are equivalent. For a machine of this type, $f_{z}(x_{\nu}, s_{\nu})$ is the same for all $s_{\nu}$, and hence $f_{z}(x_{\nu}, s_{\nu}) = f_{z}( x_{\nu} )$. From the definition introduced in section 1.6, then, it can be stated that a machine in which all states are equivalent is a trivial machine. Unless otherwise specified, further discussion will be confined to nontrivial machines only, i.e., to machines in which there is at least one distinguishable pair of states, or in whose 1-equivalence partition there are at least two classes.
+
+    \lemma \label{labelNeqPartitions} If $P_k \neq P_{k-1}$ then
+    \begin{equation} \label{labelEqProperRefinement}
+        |P_k| \geq k + 1
+    \end{equation}
+
+    \emph{Proof}. If $P_k \neq P_{k-1} $, then, by (\ref{labelEqRefinement}) and (\ref{labelEqMostRefined}), $ |P_r| > |P_{r-1}| $ for $ \emph{r} = 1,2,...,\emph{k} $. Since $ P_1 \geq 2 $, (\ref{labelEqProperRefinement}) follows by induction.
+
+    \lemma If for an \emph{n}-state machine $ P_k \neq P_{k-1} $, then the number of states in each class of $P_k$ is at most $ n - k $.
+
+    \emph{Proof}. By Lemma \ref{labelNeqPartitions}, the number of classes in $P_k$ is at least $k+1$. Suppose one class contains more than $n-k$, say $n-k+1$ states. Then, since every other class in $P_k$ must contain at least one state, the total number of states in $P_k$ is at least $ k + (n-k+1) = n+1 $. Since the total number of states cannot exceed \emph{n}, the lemma follows by contradiction.
+
+    \lemma In an \emph{n}-state machine, $P_n = P_{n-1}$.
+
+    \emph{Proof}. If $P_n \neq P_{n-1}$, then, by Lemma \ref{labelNeqPartitions}, $|P_n| \geq n+1 $. Since the number of classes in a \emph{k}-equivalence partition of an \emph{n}-state machine cannot exceed \emph{n}, the lemma follows by contradiction.
+
 
 \end{document}
