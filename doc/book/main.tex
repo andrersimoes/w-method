@@ -5,6 +5,8 @@
 \usepackage{paralist}
 \usepackage{upgreek}
 \usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{subfig}
 
 \input{utils}
 
@@ -280,5 +282,111 @@ If all the states in a given \emph{n}-state machine are 1-equivalent, $P_1$ cons
     Consider, for example, $P_3$ of machine \ref{labelMachineA7}, as given in (\ref{labelEq3A7}). The first successors of states 1, 3, and 8 are adjoint in $\Sigma_{32}$ when $\alpha$ or $\beta$ is applied and in $\Sigma_{31}$ when $\gamma$ is applied. The first successors of states 5 and 7 are adjoint in $\Sigma_{33}$ when $\alpha$ is applied, in $\Sigma_{32}$ when $\beta$ is applied, and in $\Sigma_{31}$ when $\gamma$ is applied. Consequently, \{1,3,8\} and \{5,7\} are classes of $P_4$. The first successors of states 2 and 4, with respect to every input symbol, are adjoint states in $P_3$; \{2,4\}, therefore, is a class in $P_4$. The singletons \{6\} and \{9\} appear as singletons in $P_4$. The resulting partition $P_4$, then, is as shown in (\ref{labelEq4A7}).
 
     We have thus outlined the criteria for the successive construction of $P_k$, for $\emph{k} = 1,2,3,...$. When, for every input symbol, every pair of adjoint states in $P_k$ passes into adjoint states in $P_k$, no further refinement of $P_k$ is possible, and hence $P_k = \widehat{P}$. The outlined criteria, then, lead to the determination of the equivalence partition of the given machine.
+
+\section{Partitioning by \emph{$P_k$} Tables}
+
+    In any but the simplest cases, the process of determining the equivalence partition of a given machine by inspection of the transition table, diagram, or matrix is virtually impossible. In this section we shall describe a method by which the partitioning can be carried out sistematically, by constructing a series of so-called $P_k$ tables.
+
+\begin{table}[h]
+\parbox{ .45\linewidth }{
+    \begin{tabular}{ c c | c | c  | c }
+        \cline{3-5} &  & \multicolumn{3}{ c  }{ $s_{\nu+1}$ } \\
+        \hline 
+        \multicolumn{1}{c|}{ $ \Sigma $ } & \backslashbox{$s_\nu$}{ $x_{\nu}$  } & $\alpha$ & $\beta$ & $\gamma$ \\
+        \hline
+        \multicolumn{1}{c|}{ \multirow{5}{*}{a}}  & 1 & $2_b$ & $2_b$ & $5_a$  \\
+        \multicolumn{1}{c|}{} & 3 & $2_b$ & $2_b$ & $5_a$ \\
+        \multicolumn{1}{c|}{} & 5 & $6_b$ & $4_b$ & $3_a$ \\
+        \multicolumn{1}{c|}{} & 7 & $6_b$ & $2_b$ & $8_a$ \\
+        \multicolumn{1}{c|}{} & 8 & $4_b$ & $4_b$ & $7_a$ \\
+        \hline
+        \multicolumn{1}{c|}{ \multirow{4}{*}{b}}  & 2 & $1_a$ & $4_b$ & $4_b$ \\
+        \multicolumn{1}{c|}{} & 4 & $3_a$ & $2_b$ & $2_b$ \\
+        \multicolumn{1}{c|}{} & 6 & $8_a$ & $9_b$ & $6_b$ \\
+        \multicolumn{1}{c|}{} & 9 & $7_a$ & $9_b$ & $7_a$ \\
+        \hline
+    \end{tabular}
+    \caption{ $P_1$ Table for \ref{labelMachineA7} }
+}
+\qquad{}
+\parbox{ .45\linewidth }{
+    \begin{tabular}{ c c | c | c  | c }
+        \cline{3-5} &  & \multicolumn{3}{ c  }{ $s_{\nu+1}$ } \\
+        \hline 
+        \multicolumn{1}{c|}{ $ \Sigma $ } & \backslashbox{$s_\nu$}{ $x_{\nu}$  } & $\alpha$ & $\beta$ & $\gamma$ \\
+        \hline
+        \multicolumn{1}{c|}{ \multirow{5}{*}{a}}  & 1 & $2_b$ & $2_b$ & $5_a$  \\
+        \multicolumn{1}{c|}{} & 3 & $2_b$ & $2_b$ & $5_a$ \\
+        \multicolumn{1}{c|}{} & 5 & $6_b$ & $4_b$ & $3_a$ \\
+        \multicolumn{1}{c|}{} & 7 & $6_b$ & $2_b$ & $8_a$ \\
+        \multicolumn{1}{c|}{} & 8 & $4_b$ & $4_b$ & $7_a$ \\
+        \hline
+        \multicolumn{1}{c|}{ \multirow{3}{*}{b}}  & 2 & $1_a$ & $4_b$ & $4_b$ \\
+        \multicolumn{1}{c|}{} & 4 & $3_a$ & $2_b$ & $2_b$ \\
+        \multicolumn{1}{c|}{} & 6 & $8_a$ & $9_c$ & $6_b$ \\
+        \hline
+        \multicolumn{1}{c|}{c} & 9 & $7_a$ & $9_c$ & $7_a$ \\
+        \hline
+    \end{tabular}
+    \caption{ $P_2$ Table for \ref{labelMachineA7} }
+}
+\end{table}
+
+The $P_k$ table of a given machine is essentially the same as the $ s_{\nu+1} $ subtable for that machine, with the following modifications: \begin{inparaenum}[ (1)] 
+\item If $\{ \sigma_{i_{1}}, \sigma_{i_{2}}, ..., \sigma_{i_{r}} \}$ is a class in $ P_k $, rows $ \sigma_{i_{1}}, \sigma_{i_{2}}, ..., \sigma_{i_{r}} $ are grouped together, each group separated from the adjacent ones by a rule. The order of the groups in the table and the order of the rows within each group are arbitrary. Rows which belong to the same group, and hence represents a \emph{k}-equivalence class, will be called \emph{adjoint rows}; rows which belongs to different groups will be called \emph{disjoint rows}.
+    \item A ``$\Sigma$'' column is added, which labels each group of rows in the $P_k$ table. The labels are arbitrary and may be chosen independently in each new $P_k$ table.
+    \item A subscript is attached to every $s_{\nu+1}$ entry, which identifies the group in the $P_k$ table to which the entry belongs. Thus, if row $\sigma_i$ is in the group labeled ``a'', then every $s_{\nu+1}$ entry ``$\sigma_i$'' is assigned the subscript ``a''.
+    \end{inparaenum}
+
+\begin{table}[h]
+\parbox{ .45\linewidth }{
+    \begin{tabular}{ c c | c | c  | c }
+        \cline{3-5} &  & \multicolumn{3}{ c  }{ $s_{\nu+1}$ } \\
+        \hline 
+        \multicolumn{1}{c|}{ $ \Sigma $ } & \backslashbox{$s_\nu$}{ $x_{\nu}$  } & $\alpha$ & $\beta$ & $\gamma$ \\
+        \hline
+        \multicolumn{1}{c|}{ \multirow{5}{*}{a}}  & 1 & $2_b$ & $2_b$ & $5_a$  \\
+        \multicolumn{1}{c|}{} & 3 & $2_b$ & $2_b$ & $5_a$ \\
+        \multicolumn{1}{c|}{} & 5 & $6_c$ & $4_b$ & $3_a$ \\
+        \multicolumn{1}{c|}{} & 7 & $6_c$ & $2_b$ & $8_a$ \\
+        \multicolumn{1}{c|}{} & 8 & $4_b$ & $4_b$ & $7_a$ \\
+        \hline
+        \multicolumn{1}{c|}{ \multirow{2}{*}{b}}  & 2 & $1_a$ & $4_b$ & $4_b$ \\
+        \multicolumn{1}{c|}{} & 4 & $3_a$ & $2_b$ & $2_b$ \\
+        \hline
+        \multicolumn{1}{c|}{c} & 6 & $8_a$ & $9_d$ & $6_c$ \\
+        \hline
+        \multicolumn{1}{c|}{d} & 9 & $7_a$ & $9_d$ & $7_a$ \\
+        \hline
+    \end{tabular}
+    \caption{ $P_3$ Table for \ref{labelMachineA7} }
+}
+\qquad
+\parbox{ .45\linewidth }{
+    \begin{tabular}{ c c | c | c  | c }
+        \cline{3-5} &  & \multicolumn{3}{ c  }{ $s_{\nu+1}$ } \\
+        \hline 
+        \multicolumn{1}{c|}{ $ \Sigma $ } & \backslashbox{$s_\nu$}{ $x_{\nu}$  } & $\alpha$ & $\beta$ & $\gamma$ \\
+        \hline
+        \multicolumn{1}{c|}{ \multirow{3}{*}{a}}  & 1 & $2_b$ & $2_b$ & $5_c$  \\
+        \multicolumn{1}{c|}{} & 3 & $2_b$ & $2_b$ & $5_c$ \\
+        \multicolumn{1}{c|}{} & 8 & $4_b$ & $4_b$ & $7_c$ \\
+        \hline
+        \multicolumn{1}{c|}{ \multirow{2}{*}{b}}  & 2 & $1_a$ & $4_b$ & $4_b$ \\
+        \multicolumn{1}{c|}{} & 4 & $3_a$ & $2_b$ & $2_b$ \\
+        \hline
+        \multicolumn{1}{c|}{ \multirow{2}{*}{c}} & 5 & $6_d$ & $4_b$ & $3_a$ \\
+        \multicolumn{1}{c|}{} & 7 & $6_d$ & $2_b$ & $8_a$ \\
+        \hline
+        \multicolumn{1}{c|}{d} & 6 & $8_a$ & $9_e$ & $6_d$ \\
+        \hline
+        \multicolumn{1}{c|}{e} & 9 & $7_c$ & $9_e$ & $7_c$ \\
+        \hline
+    \end{tabular}
+    \caption{ $P_4$ Table for \ref{labelMachineA7} }
+}
+
+\end{table}
+
 
 \end{document}
