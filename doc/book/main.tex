@@ -231,6 +231,7 @@ In what follows, the notation $ M |\sigma $ will be used as an abbreviation for 
     is seen to be identical do $P_4$, and hence the adjoint states in every class of $P_4$ are equivalent.
 
 \section{Equivalence Partitions}
+\label{labelSectionEquivPartitions}
 
 A \emph{k}-equivalence partition for machine $M$ is called an \emph{equivalence partition} of $M$, and denoted by $ \widehat{P} $, if the adjoint states in every class of this partition are equivalent. Under these conditions, each class in the partition is called an \emph{equivalence class}. From the discussion in \ref{labelSectionEquivalenceK} it follows that $ \widehat{P} $ is the most refined $P_k$ partition. By Theorem \ref{labelRefinement}, $ \widehat{P} $ can be obtained by constructing $P_k$ for $ \emph{k} = 1,2,3...$, until, for the first time, a partition is produced which is identical to the one previously produced; this partition is $ \widehat{P} $. Let $P_i = P_j $ signify the fact that $P_i$ and $P_j$ are identical partitions, and let $|P_i|$ denote the number of classes in $P_i$. Using this notation, the preceding results can be summarized as follows:
 
@@ -307,6 +308,7 @@ If all the states in a given \emph{n}-state machine are 1-equivalent, $P_1$ cons
         \hline
     \end{tabular}
     \caption{ $P_1$ Table for \ref{labelMachineA7} }
+    \label{table:tableP1A7}
 }
 \qquad{}
 \parbox{ .45\linewidth }{
@@ -329,6 +331,7 @@ If all the states in a given \emph{n}-state machine are 1-equivalent, $P_1$ cons
         \hline
     \end{tabular}
     \caption{ $P_2$ Table for \ref{labelMachineA7} }
+    \label{table:tableP2A7}
 }
 \end{table}
 
@@ -337,6 +340,10 @@ The $P_k$ table of a given machine is essentially the same as the $ s_{\nu+1} $ 
     \item A ``$\Sigma$'' column is added, which labels each group of rows in the $P_k$ table. The labels are arbitrary and may be chosen independently in each new $P_k$ table.
     \item A subscript is attached to every $s_{\nu+1}$ entry, which identifies the group in the $P_k$ table to which the entry belongs. Thus, if row $\sigma_i$ is in the group labeled ``a'', then every $s_{\nu+1}$ entry ``$\sigma_i$'' is assigned the subscript ``a''.
     \end{inparaenum}
+
+    Tables \ref{table:tableP1A7} to \ref{table:tableP4A7} are the $P_1, P_2, P_3$, and $P_4$ tables for machine \ref{labelMachineA7} of Figure \ref{fig:machineA7}.
+
+    \emph{Construction of the $P_1$ Table}. Reorder the rows of the transition table so that rows which are identical in the $z_\nu$ subtable become adjacent. Each group of such rows corresponds to a 1-equivalence class, and hence to a group of adjoint rows in the $P_1$ table. The $P_1$ table can now be constructed by deleting the $z_{\nu}$ subtable, separating the row groups by rules, adding a ``$\Sigma$'' column, and subscripting the $s_{\nu} + 1$ entries as described above. For an illustration, refer to Tables \ref{table:transitionA7} and \ref{table:tableP1A7}.
 
 \begin{table}[h]
 \parbox{ .45\linewidth }{
@@ -360,6 +367,7 @@ The $P_k$ table of a given machine is essentially the same as the $ s_{\nu+1} $ 
         \hline
     \end{tabular}
     \caption{ $P_3$ Table for \ref{labelMachineA7} }
+    \label{table:tableP3A7}
 }
 \qquad
 \parbox{ .45\linewidth }{
@@ -384,9 +392,22 @@ The $P_k$ table of a given machine is essentially the same as the $ s_{\nu+1} $ 
         \hline
     \end{tabular}
     \caption{ $P_4$ Table for \ref{labelMachineA7} }
+    \label{table:tableP4A7}
 }
 
 \end{table}
+
+\emph{Construction of the $P_{k+1}$ Table from the $P_k$ Table $(k\geq 1)$}. A pair of adjoint rows in the $P_k$ table which, in every column, exhibit identical subscripts are adjoint rows in the $P_{k+1}$ table. A pair of adjoint rows in the $P_k$ table which, in some column, exhibit different subscripts are disjoint rows in the $P_{k+1}$ table. Disjoint rows in the $P_{k}$ table are also disjoint in the $P_{k+1}$ table. A group in the $P_k$ table consisting of a single row remains a single-row group in the $P_{k+1}$ table. Thus, the groups of the $P_{k+1}$ tables can be estabilished by inspection of the subscripts in the $P_k$ table. Once the groups are estabilished, the table itself can be constructed according to the format stipulated above. The justification for the foregoing rules follows directly from the manner in which the subscripts are assigned and from the criteria for determining $P_{k+1}$ from $P_k$, as outlined in Section \ref{labelSectionEquivPartitions}.
+
+    As an example, consider the $P_3$ table for \ref{labelMachineA7}, shown in Table \ref{table:tableP3A7}. In group ``a'', rows 1, 3 and 8 have identical subscripts in every column, and so do rows 5 and 7 (whose subscripts differ from those of 1, 3 and 8).
+
+    Consequently, rows 1, 3 and 8 and rows 5 and 7 constitute two groups of rows in the $P_4$ table. In group ``b'' all rows exhibit identical subscripts in every column, and hence the group remains intact in the $P_4$ table. Groups ``c'' and ``d'', consisting of one row each, can be transferred intact to the $P_4$ table.
+
+    Given a procedure for constructing the $P_1$ table, and the $P_{k+1}$ table from the $P_k$ table $( k \geq 1 )$, one can construct the $P_k$ table for successive values of \emph{k}, until a table is obtained in which all adjoint rows exhibit identical subscripts in every column. The stub entries of these adjoint rows represent equivalent states, and hence the group of stub entries in this table represent the desired equivalence classes. By Theorem \ref{labelTheoremLastMostRefined}, this condition must occur for some value of $\emph{k} \leq n - 1$. For machine \ref{labelMachineA7} the condition is exhibited by the $P_4$ table in Table \ref{table:tableP4A7}. The equivalence partition of \ref{labelMachineA7} is, therefore, given by
+
+\begin{equation}
+    P: \quad{} \{1,3,8\}, \{2,4\}, \{5,7\}, \{6\}, \{9\} 
+\end{equation}
 
 
 \end{document}
