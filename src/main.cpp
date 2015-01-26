@@ -2,6 +2,7 @@
 #include <set>
 #include <vector>
 #include <list>
+#include <algorithm>
 #include "matrix.h"
 
 class DeltaTable
@@ -63,133 +64,271 @@ private:
     Matrix<int> _nextStateMat;
 };
 
-class EquivalenceK
+
+typedef std::list< std::pair<int,int> > IndexList; // <numero do estado, numero da linha correspondente em classIdxM>
+
+struct EquivClass
+{
+    IndexList equivStateL;
+    Matrix<char> classIdxM;
+};
+
+class KTable
 {
 public:
-    EquivalenceK( int kLevel = 1 )
+    KTable()
     {
-        _kLevel = kLevel;
+        ptrOutM = ptrNextM = 0;
     }
 
-    void processDeltaTable( DeltaTable &table, std::list<int> inCheckList )
+    void buildFirstPartition( DeltaTable *deltaTable )
     {
-        _partition.clear();
+        ptrNextM = deltaTable->getNextStateMatrixPtr();
+        ptrOutM = deltaTable->getOutMatrixPtr();
 
-        _ptrOutM = table.getOutMatrixPtr();
-        _ptrNextStateM = table.getNextStateMatrixPtr();
+        std::list<int> stateList;
 
-        std::list<int>::iterator it, mainState;
-        it = mainState = inCheckList.begin();
-        ++it;
+        for( size_t sIdx = 0; sIdx < ptrOutM->numRows(); ++sIdx )
+            stateList.push_back( (int)sIdx );
 
-        std::list<int> notEquivList;
-
-        while( ! inCheckList.empty() )
+        while( stateList.empty() == false )
         {
-            int firstSt = inCheckList.front();
+            int baseState = stateList.front();
+            stateList.pop_front();
 
-            std::list<int> equivL;
-            equivL.push_back( firstSt );
-            inCheckList.pop_front();
+            IndexList equivStates;
+            equivStates.push_back( std::pair<int,int>( baseState, 0 ) );
+            int matrixRow = 1;
 
-            std::list<int>::iterator it = inCheckList.begin();
-            while( it != inCheckList.end() )
+            std::list<int>::iterator it = stateList.begin();
+            while( it != stateList.end() )
             {
-                bool isEquivalent = areStatesEquivalent( firstSt, *it, _kLevel );
-                
-                if( isEquivalent )
+                if( areOutputsEqual( baseState, *it ) )
                 {
-                    equivL.push_back( *it );
-                    it = inCheckList.erase( it );
+                    equivStates.push_back( std::pair<int,int>( *it, matrixRow++ ) );
+                    it = stateList.erase( it );
                 }
                 else
-                {
-                    notEquivList.push_back( *it );
-                    it = inCheckList.erase( it );
-                }
+                    ++it;
             }
 
-            if( ! equivL.empty() ) _partition.push_back( equivL );
-            inCheckList = notEquivList;
-            notEquivList.clear();
+            EquivClass *ec = new EquivClass;
+            ec->equivStateL = equivStates;
+
+            equivClassV.push_back( ec );
+        }
+
+        for( size_t i = 0; i < equivClassV.size(); ++i )
+            createIndexesForClass( equivClassV.at( i ) );
+    }
+
+    void print( void )
+    {
+        for( size_t i = 0; i < equivClassV.size(); ++i )
+        {
+            EquivClass *ec = equivClassV.at( i );
+            std::cout << std::endl << "Equiv class " << i + 1 << std::endl;
+
+            IndexList::iterator it = ec->equivStateL.begin();
+            while( it != ec->equivStateL.end() )
+            {
+                std::cout << it->first + 1 << ' ';
+                for( size_t j = 0; j < ptrNextM->numCols(); ++j )
+                    std::cout << ptrNextM->operator[]( it->first )[ j ] + 1 << ec->classIdxM[ it->second ][ j ] << ' ';
+                std::cout << std::endl;
+
+                ++it;
+            }
         }
     }
 
-    void print()
+    KTable *refinePartition()
     {
-        std::cout << "EquivalenceK::print() - " << _kLevel << "-equivalence partition" << std::endl;
+        KTable *refined = new KTable;
 
-        std::list< std::list<int> >::iterator itOut;
-        std::list<int>::iterator itIn;
-
-        itOut = _partition.begin();
-
-        while( itOut != _partition.end() )
+        for( size_t i = 0; i < equivClassV.size(); ++i )
         {
-            itIn = itOut->begin();
+            EquivClass *ec = equivClassV.at( i );
+            IndexList inCheckList = ec->equivStateL;
 
-            while( itIn != itOut->end() )
+            while( inCheckList.empty() == false )
             {
-                std::cout << *itIn << " ";
-                ++itIn;
-            }
-            std::cout << std::endl;
+                std::pair<int,int> baseState = inCheckList.front();
+                int matrixRow = 1;
+                inCheckList.pop_front();
 
-            ++itOut;
+                IndexList equivList;
+                equivList.push_back( std::pair<int,int>( baseState.first, 0 ) );
+
+                IndexList::iterator it = inCheckList.begin();
+
+                while( it != inCheckList.end() )
+                {
+                    if( areNextStatesEqual( &baseState, &(*it), &ec->classIdxM )  )
+                    {
+                        equivList.push_back( std::pair<int,int>( it->first, matrixRow++ ) );
+                        it = inCheckList.erase( it );
+                    }
+                    else
+                        ++it;
+                }
+
+                EquivClass *ec = new EquivClass;
+                ec->equivStateL = equivList;
+
+                refined->equivClassV.push_back( ec );
+            }
         }
+        
+        if( refined->equivClassV.size() != equivClassV.size() )
+        {
+            refined->ptrOutM = ptrOutM;
+            refined->ptrNextM = ptrNextM;
+
+            for( size_t i = 0; i < refined->equivClassV.size(); ++i )
+                refined->createIndexesForClass( refined->equivClassV.at( i ) );
+        }
+        else
+        {
+            delete refined;
+            refined = 0;
+        }
+
+        return refined;
+    }
+
+    void clear( void )
+    {
+        for( size_t i = 0; i < equivClassV.size(); ++i )
+            delete equivClassV.at( i );
+        equivClassV.clear();
+    }
+
+    ~KTable()
+    {
+        clear();
     }
 
 private:
-    bool areStatesEquivalent( int sa, int sb, int level )
+
+    bool areNextStatesEqual( std::pair<int,int> *s1, std::pair<int,int> *s2, Matrix<char> *ptrClassM )
     {
-        bool isEquivalent = true;
-        for( size_t j = 0; j < _ptrOutM->numCols(); ++j )
+        bool equal = true;
+        for( size_t j = 0; j < ptrClassM->numCols(); ++j )
         {
-            if( _ptrOutM->operator[]( sa )[j] != _ptrOutM->operator[]( sb )[j] )
+            if( ptrClassM->operator[]( s1->second )[ j ] != ptrClassM->operator[]( s2->second )[ j ] )
             {
-                isEquivalent = false;
+                equal = false;
                 break;
             }
         }
+        return equal;
+    }
 
-        if( isEquivalent && level > 1 )
+    bool areOutputsEqual( int s1, int s2 )
+    {
+        bool equal = true;
+        size_t cols = ptrOutM->numCols();
+        for( size_t j = 0; j < cols; ++j )
         {
-            for( size_t j = 0; j < _ptrOutM->numCols(); ++j )
+            if( ptrOutM->operator[]( s1 )[ j ] != ptrOutM->operator[]( s2  )[ j ] )
             {
-                if( !areStatesEquivalent( _ptrNextStateM->operator[]( sa )[j],
-                                          _ptrNextStateM->operator[]( sb )[j],
-                                          level-1 ) )
-                {
-                    isEquivalent = false;
-                    break;
-                }
+                equal = false;
+                break;
+            }
+        }
+        return equal;
+    }
+
+    void createIndexesForClass( EquivClass *ec )
+    {
+        ec->classIdxM.setSize( ec->equivStateL.size(), ptrOutM->numCols() );
+
+        IndexList::iterator it, end;
+        it = ec->equivStateL.begin();
+        end = ec->equivStateL.end();
+
+        char startChar = 'a';
+        size_t rowIdx = 0;
+
+        while( it != end )
+        {
+            int sIdx = it->first;
+
+            for( size_t j = 0; j < ptrNextM->numCols(); ++j )
+            {
+                int classIdx = getClassIdxByState( ptrNextM->operator[]( sIdx )[ j ] );
+                ec->classIdxM[ rowIdx ][ j ] = startChar + classIdx;
+            }
+
+            ++rowIdx;
+            ++it;
+        }
+    }
+
+    int getClassIdxByState( int sIdx )
+    {
+        for( size_t i = 0; i < equivClassV.size(); ++i )
+        {
+            EquivClass *ec = equivClassV.at( i );
+            IndexList::iterator it, end;
+            it = ec->equivStateL.begin();
+            end = ec->equivStateL.end();
+
+            while( it != end )
+            {
+                if( it->first == sIdx ) return (int)i;
+                ++it;
             }
         }
 
-        return isEquivalent;
+        return -1;
     }
 
-    std::list< std::list<int> > _partition;
-
-    Matrix<int> *_ptrOutM;
-    Matrix<int> *_ptrNextStateM;
-
-    size_t _kLevel;
+private:
+    std::vector<EquivClass*> equivClassV;
+    Matrix<int> *ptrOutM;
+    Matrix<int> *ptrNextM;
 };
 
-class PartitionK
+class Refiner
 {
 public:
-    PartitionK(){}
+    Refiner(){}
 
-    void processDeltaTable( DeltaTable *table )
+    void processDeltaTable( DeltaTable *deltaTable )
     {
-        //EquivalenceK *equiv = new EquivalenceK;
-    }
-private:
+        KTable *partition = new KTable;
 
-    //std::list<EquivalenceK*> _equivL;
+        partition->buildFirstPartition( deltaTable );
+        ktableL.push_back( partition );
+
+        while( ( partition = partition->refinePartition() ) )
+        {
+            std::cout << "----------------------------------"  << std::endl;
+            partition->print();
+            ktableL.push_back( partition );
+        }
+    }
+
+    void clear()
+    {
+        while( ktableL.empty() == false )
+        {
+            delete ktableL.front();
+            ktableL.pop_front();
+        }
+    }
+
+    ~Refiner()
+    {
+        clear();
+    }
+
+private:
+    std::list<KTable*> ktableL;
 };
+
 
 int main()
 {
@@ -197,26 +336,22 @@ int main()
 
     table.addAction( "alfa" );
     table.addAction( "beta" );
-    table.addAction( "gamma" );
-    table.setNumberOfStates( 9 );
+    //table.addAction( "gamma" );
+    //table.setNumberOfStates( 9 );
+    table.setNumberOfStates( 5 );
 
     table.resizeMatrices();
 
     Matrix<int> &outM = table.getOutMatrixRef();
     Matrix<int> &stateM = table.getNextStateMatrixRef();
 
-    outM.loadFromFile( "../data/outTable.txt", true ); 
-    stateM.loadFromFile( "../data/nextTable.txt", true ); stateM += -1;
+    outM.loadFromFile( "../data/outTable-A17.txt", true ); 
+    stateM.loadFromFile( "../data/nextTable-A17.txt", true ); stateM += -1;
+
+    Refiner refiner;
+    refiner.processDeltaTable( &table );
 
     table.print();
-
-
-    std::list<int> inCheckList;
-    for( size_t i = 0; i < outM.numRows(); ++i ) inCheckList.push_back( i );
-
-    EquivalenceK ek(10);
-    ek.processDeltaTable( table, inCheckList );
-    ek.print();
 
     return 0;
 }
