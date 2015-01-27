@@ -80,10 +80,83 @@ std::string Refiner::buildDiagSequence( int s1, int s2 )
     return strSequence;
 }
 
-void Refiner::buildDiagSet( void )
+std::list<std::string> Refiner::buildDiagSet( bool fullSet )
 {
-    buildDiagSequence( 3, 4 );
+    std::list<std::string> retval;
+
+    if( fullSet ) buildFullDiagSet( retval );
+    else buildUniqueStringSet( retval );
+
+    return retval;
 }
+
+
+void Refiner::buildFullDiagSet( std::list<std::string> &retval )
+{
+    int numStates = (int)  deltaTable->getNumberOfStates();
+    for( int s1 = 0; s1 < numStates; ++s1 )
+        for( int s2 = s1+1; s2 < numStates; ++s2 )
+            retval.push_back( buildDiagSequence( s1, s2 ) );
+}
+
+void Refiner::buildUniqueStringSet( std::list<std::string> &retval )
+{
+    int numStates = (int)  deltaTable->getNumberOfStates();
+    for( int s1 = 0; s1 < numStates; ++s1 )
+    {
+        for( int s2 = s1+1; s2 < numStates; ++s2 )
+        {
+            std::string sequence = buildDiagSequence( s1, s2 );
+            keepGreaterElementOnList( sequence, retval );
+        }
+    }
+
+    /*std::list<std::string>::iterator it, end;
+    it = retval.begin(); end = retval.end();
+    while( it != end ) std::cout << *it++ << std::endl;*/
+
+}
+
+void Refiner::keepGreaterElementOnList( std::string &strElement,
+        std::list<std::string> &list )
+{
+    std::list<std::string>::iterator it, end;
+    it = list.begin();
+    end = list.end();
+
+    size_t baseSize = strElement.size();
+
+    while( it != end )
+    {
+        size_t secSize = it->size();
+        size_t minSize = ( baseSize < secSize ) ? baseSize : secSize;
+        bool equal = true;
+
+        for( size_t i = 0; i < minSize; ++i )
+        {
+            if( strElement[ i ] != it->at( i ) )
+            {
+                equal = false;
+                break;
+            }
+        }
+
+        if( equal )
+        {
+            if( baseSize > secSize )
+            {
+               it = list.erase( it );
+               list.push_back( strElement );
+            }
+            return;
+        }
+
+        ++it;
+    }
+
+    list.push_back( strElement );
+}
+
 
 void Refiner::processDeltaTable( DeltaTable *dt )
 {
