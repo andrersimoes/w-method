@@ -7,12 +7,12 @@ KTable::KTable()
     ptrOutM = ptrNextM = 0;
 }
 
-bool KTable::areNextStatesEqual( std::pair<int,int> *s1, std::pair<int,int> *s2, Matrix<char> *ptrClassM )
+bool KTable::areNextStatesEqual( int s1, int s2 )
 {
     bool equal = true;
-    for( size_t j = 0; j < ptrClassM->numCols(); ++j )
+    for( size_t j = 0; j < classIdxM.numCols(); ++j )
     {
-        if( ptrClassM->operator[]( s1->second )[ j ] != ptrClassM->operator[]( s2->second )[ j ] )
+        if( classIdxM[ s1 ][ j ] != classIdxM[ s2 ][ j ] )
         {
             equal = false;
             break;
@@ -51,16 +51,15 @@ void KTable::buildFirstPartition( DeltaTable *deltaTable )
         int baseState = stateList.front();
         stateList.pop_front();
 
-        IndexList equivStates;
-        equivStates.push_back( std::pair<int,int>( baseState, 0 ) );
-        int matrixRow = 1;
+        std::list<int> equivStates;
+        equivStates.push_back( baseState );
 
         std::list<int>::iterator it = stateList.begin();
         while( it != stateList.end() )
         {
             if( areOutputsEqual( baseState, *it ) )
             {
-                equivStates.push_back( std::pair<int,int>( *it, matrixRow++ ) );
+                equivStates.push_back( *it );
                 it = stateList.erase( it );
             }
             else
@@ -73,8 +72,7 @@ void KTable::buildFirstPartition( DeltaTable *deltaTable )
         equivClassV.push_back( ec );
     }
 
-    for( size_t i = 0; i < equivClassV.size(); ++i )
-        createIndexesForClass( equivClassV.at( i ) );
+    createTableIndexes();
 }
 
 void KTable::clear( void )
@@ -86,28 +84,32 @@ void KTable::clear( void )
 
 void KTable::createIndexesForClass( EquivClass *ec )
 {
-    ec->classIdxM.setSize( ec->equivStateL.size(), ptrOutM->numCols() );
-
-    IndexList::iterator it, end;
+    std::list<int>::iterator it, end;
     it = ec->equivStateL.begin();
     end = ec->equivStateL.end();
 
     char startChar = 'a';
-    size_t rowIdx = 0;
 
     while( it != end )
     {
-        int sIdx = it->first;
+        int sIdx = *it;
 
         for( size_t j = 0; j < ptrNextM->numCols(); ++j )
         {
             int classIdx = getClassIdxByState( ptrNextM->operator[]( sIdx )[ j ] );
-            ec->classIdxM[ rowIdx ][ j ] = startChar + classIdx;
+            classIdxM[ sIdx ][ j ] = startChar + classIdx;
         }
 
-        ++rowIdx;
         ++it;
     }
+}
+
+void KTable::createTableIndexes( void )
+{
+    classIdxM.setSize( ptrOutM->numRows(), ptrOutM->numCols() );
+
+    for( size_t i = 0; i < equivClassV.size(); ++i )
+        createIndexesForClass( equivClassV.at( i ) );
 }
 
 int KTable::getClassIdxByState( int sIdx )
@@ -115,13 +117,13 @@ int KTable::getClassIdxByState( int sIdx )
     for( size_t i = 0; i < equivClassV.size(); ++i )
     {
         EquivClass *ec = equivClassV.at( i );
-        IndexList::iterator it, end;
+        std::list<int>::iterator it, end;
         it = ec->equivStateL.begin();
         end = ec->equivStateL.end();
 
         while( it != end )
         {
-            if( it->first == sIdx ) return (int)i;
+            if( *it == sIdx ) return (int)i;
             ++it;
         }
     }
@@ -136,12 +138,12 @@ void KTable::print( void )
         EquivClass *ec = equivClassV.at( i );
         std::cout << std::endl << "Equiv class " << i + 1 << std::endl;
 
-        IndexList::iterator it = ec->equivStateL.begin();
+        std::list<int>::iterator it = ec->equivStateL.begin();
         while( it != ec->equivStateL.end() )
         {
-            std::cout << it->first + 1 << ' ';
+            std::cout << *it + 1 << ' ';
             for( size_t j = 0; j < ptrNextM->numCols(); ++j )
-                std::cout << ptrNextM->operator[]( it->first )[ j ] + 1 << ec->classIdxM[ it->second ][ j ] << ' ';
+                std::cout << ptrNextM->operator[]( *it )[ j ] + 1 << classIdxM[ *it ][ j ] << ' ';
             std::cout << std::endl;
 
             ++it;
@@ -156,24 +158,23 @@ KTable* KTable::refinePartition()
     for( size_t i = 0; i < equivClassV.size(); ++i )
     {
         EquivClass *ec = equivClassV.at( i );
-        IndexList inCheckList = ec->equivStateL;
+        std::list<int> inCheckList = ec->equivStateL;
 
         while( inCheckList.empty() == false )
         {
-            std::pair<int,int> baseState = inCheckList.front();
-            int matrixRow = 1;
+            int baseState = inCheckList.front();
             inCheckList.pop_front();
 
-            IndexList equivList;
-            equivList.push_back( std::pair<int,int>( baseState.first, 0 ) );
+            std::list<int> equivList;
+            equivList.push_back( baseState );
 
-            IndexList::iterator it = inCheckList.begin();
+            std::list<int>::iterator it = inCheckList.begin();
 
             while( it != inCheckList.end() )
             {
-                if( areNextStatesEqual( &baseState, &(*it), &ec->classIdxM )  )
+                if( areNextStatesEqual( baseState, *it ) )
                 {
-                    equivList.push_back( std::pair<int,int>( it->first, matrixRow++ ) );
+                    equivList.push_back( *it );
                     it = inCheckList.erase( it );
                 }
                 else
@@ -192,8 +193,7 @@ KTable* KTable::refinePartition()
         refined->ptrOutM = ptrOutM;
         refined->ptrNextM = ptrNextM;
 
-        for( size_t i = 0; i < refined->equivClassV.size(); ++i )
-            refined->createIndexesForClass( refined->equivClassV.at( i ) );
+        refined->createTableIndexes();
     }
     else
     {

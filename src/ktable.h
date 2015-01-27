@@ -6,12 +6,9 @@
 
 #include "matrix.h"
 
-typedef std::list< std::pair<int,int> > IndexList; // <numero do estado, numero da linha correspondente em classIdxM>
-
 struct EquivClass
 {
-    IndexList equivStateL;
-    Matrix<char> classIdxM;
+    std::list<int> equivStateL;
 };
 
 class DeltaTable;
@@ -23,20 +20,22 @@ public:
 
     void buildFirstPartition( DeltaTable *deltaTable );
     void clear( void );
-    void print( void );
+    void print( void ); 
     KTable *refinePartition();
 
     ~KTable();
 private:
-    bool areNextStatesEqual( std::pair<int,int> *s1, std::pair<int,int> *s2, Matrix<char> *ptrClassM );
+    bool areNextStatesEqual( int s1, int s2 );
     bool areOutputsEqual( int s1, int s2 );
     void createIndexesForClass( EquivClass *ec );
+    void createTableIndexes( void );
     int getClassIdxByState( int sIdx );
 
 private:
     std::vector<EquivClass*> equivClassV;
     Matrix<int> *ptrOutM;
     Matrix<int> *ptrNextM;
+    Matrix<char> classIdxM;
 };
 
 #endif // KTABLE_H
