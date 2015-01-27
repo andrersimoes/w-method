@@ -1,0 +1,43 @@
+\chapter{State identification experiments}
+
+\section{Introduction}
+
+% TODO rewrite Chap. 1
+As was pointed out in Chap. 1, the response of a nontrivial machine \emph{M} to specified excitations is unpredictable if the state of \emph{M} is unknown; this response, on the other hand, can always be predicted if the initial state is known. One of the basic tasks in the analysis of finite-state machines, therefore, is to identify the state of the machine under investigation. Once the state is identified, the behavior of the machine under all future conditions becomes determinable, and steps may be taken to force the machine into varios modes of operation desirable to the investigator.
+
+    In this chapter we shall discuss two of the most important state identifications problems - that of identifying the initial state of a machine (i.e., the state in which a machine exists when presented to the investigator) and that of identifying the final state of a machine (i.e., the state in which a machine exists when the probing operations conducted by the investigator are completed). The solution to either of these problems constitutes the solution to the basic problem of rendering the machine predictable to the investigator. As will be seen in a later chapter, this quantities of interest is considerably larger than that involved in the state identification problem.
+
+\section{Classification Experiments}
+
+    The process of applying input sequences to the input terminals of a machine, observing the resulting output sequences, and drawing conclusions based on these observations will be called an \emph{experiment}. In all our discussions, without exception, it will be assumed that a machine on which an experiment is conducted is a sealed ``black box'' with only the input and output terminals accessible. Conclusions may be based only on applied excitations, observed responses, and possibly, on transition tables (or diagrams, or matrices) which may be available for the task at hand.
+
+    We shall distinguish between two tupes of experiments:
+\begin{enumerate}
+    \item \emph{Preset experiments}, where the applied input sequence is completely determined in advance;
+    \item \emph{Adaptive experiments}, where the applied input sequence is composed of two or more subsequences, each subsequence (except the first) determined on the basis of responses resulting from preceding subsequences;
+
+\begin{figure}
+% TODO: insert figure 4.1
+\end{figure}
+
+    A preset experiment, as a rule, is easier to implement than an adaptive one: whereas the latter requires a number of intermediate decisions before the final decision is made, the former requires no such intermediate decisions. Envisioning a human or a mechanical ``input-sequence-generator'', whose function is to supply the machine with the required input sequences, it can be seen that in preset experiments the generator should be capable of supplying a single sequence only. In adaptive experiments, on the other hand, the generator should be capable of generating a number of sequences, each sequence based on information fed back from the output terminal of the machine. As we shall see, the advantage of some adaptive experiments is that they are relative concise; also, is some cases, adaptive experiments are easier to design than preset ones. A schematic representation of the two types of experiments is shown in \ref{ TODO }.
+
+    One machine is referred to as the \emph{copy} of another machine, if both machines have identical transition tables, and if both are at the same state before the experiment commences. Experiments can be classified according to the number of copies which they require of the machine under investigation:
+
+\begin{enumerate}
+    \item \emph{Simple experiments}, where only one copy of the machine is required.
+    \item \emph{Multiple experiments}, where more than one copy of the machine is required.
+\end{enumerate}
+
+    As most machines encountered in practice are available in one copy only, simple experiments are preferable to multiple ones.
+
+    The \emph{length} of an experiment is taken as the total number of input symbols applied in the course of conducting the experiment. The \emph{order} of an experiment is taken as the number of input subsequences (i.e., sequences separated by decision-making operations) of which the experiment is composed. The \emph{multiplicity} of an experiment is the number of copies it requires of the machine under investigation. Thus, a preset experiment is an experiment of order 1, and an adaptive experiment is an experiment of order 2 or greater. A simple experiment is an experiment of multiplicity 1, and a multiple experiment is an experiment of multiplicity 2 or greater. The length, order, and multiplicity of an experiment may be regarded as rough measures of its execution cost.
+
+\section{Diagnosing and Homing Experiments}
+
+    Our main concern in this chapter is to devise experiments for solving the following two problems:
+\begin{enumerate}
+    \item \emph{The diagnosing problem}: It is knwon that a given machine \emph{M}, whose transition table is available, is in one of the states $ \sigma_{i_{}} $
+\end{enumerate}
+
+\end{enumerate}
