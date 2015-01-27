@@ -30,7 +30,10 @@ int main()
     Refiner refiner;
     refiner.processDeltaTable( &table );
 
-    table.print();
+    std::cout << "Minimal: " << ( ( refiner.isMachineMinimal() == true ) ? "true" : "false" ) << std::endl;
+
+    refiner.buildDiagSet();
+    //table.print();
 
     return 0;
 }

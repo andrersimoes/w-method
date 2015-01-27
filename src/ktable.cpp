@@ -36,6 +36,33 @@ bool KTable::areOutputsEqual( int s1, int s2 )
     return equal;
 }
 
+bool KTable::areStatesInTheSameClass( int s1, int s2 )
+{
+    for( size_t i = 0; i < equivClassV.size(); ++i )
+    {
+        EquivClass *ec = equivClassV.at( i );
+
+        std::list<int>::iterator it, end;
+        it = ec->equivStateL.begin(); end = ec->equivStateL.end();
+
+        bool s1Found = false;
+        bool s2Found = false;
+
+        while( it != end && !(s1Found & s2Found) )
+        {
+            if( *it == s1 ) s1Found = true;
+            else if( *it == s2 ) s2Found = true;
+
+            ++it;
+        }
+
+        if( s1Found & s2Found )
+            return true;
+    }
+
+    return false;
+}
+
 void KTable::buildFirstPartition( DeltaTable *deltaTable )
 {
     ptrNextM = deltaTable->getNextStateMatrixPtr();

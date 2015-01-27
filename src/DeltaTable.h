@@ -12,6 +12,7 @@ public:
     DeltaTable(){}
 
     void addAction( std::string action ){ _alfabet.insert( action ); }
+    size_t getNumberOfStates(){ return _numStates; }
 
     Matrix<int> *getNextStateMatrixPtr(){ return &_nextStateMat; }
     Matrix<int> *getOutMatrixPtr(){ return &_outputMat; }
