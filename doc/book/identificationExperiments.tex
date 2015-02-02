@@ -18,10 +18,23 @@ As was pointed out in Chap. 1, the response of a nontrivial machine \emph{M} to 
 \end{enumerate}
 
 \begin{figure}
-% TODO: insert figure 4.1
+    \centering
+    \begin{subfigure}{.85\textwidth}
+        \centering
+        \includegraphics[width=256pt, clip]{images/eps/presetExperiment}
+        \caption{Preset experiment}
+        \qquad
+    \end{subfigure}
+    \begin{subfigure}{.85\textwidth}
+        \centering
+        \includegraphics[width=256pt, clip]{images/eps/adaptiveExperiment}
+        \caption{Adaptive experiment}
+    \end{subfigure}
+    \caption{Types of experiments}
+    \label{fig:experiments}
 \end{figure}
 
-    A preset experiment, as a rule, is easier to implement than an adaptive one: whereas the latter requires a number of intermediate decisions before the final decision is made, the former requires no such intermediate decisions. Envisioning a human or a mechanical ``input-sequence-generator'', whose function is to supply the machine with the required input sequences, it can be seen that in preset experiments the generator should be capable of supplying a single sequence only. In adaptive experiments, on the other hand, the generator should be capable of generating a number of sequences, each sequence based on information fed back from the output terminal of the machine. As we shall see, the advantage of some adaptive experiments is that they are relative concise; also, is some cases, adaptive experiments are easier to design than preset ones. A schematic representation of the two types of experiments is shown in Fig. \ref{ TODO }.
+    A preset experiment, as a rule, is easier to implement than an adaptive one: whereas the latter requires a number of intermediate decisions before the final decision is made, the former requires no such intermediate decisions. Envisioning a human or a mechanical ``input-sequence-generator'', whose function is to supply the machine with the required input sequences, it can be seen that in preset experiments the generator should be capable of supplying a single sequence only. In adaptive experiments, on the other hand, the generator should be capable of generating a number of sequences, each sequence based on information fed back from the output terminal of the machine. As we shall see, the advantage of some adaptive experiments is that they are relative concise; also, is some cases, adaptive experiments are easier to design than preset ones. A schematic representation of the two types of experiments is shown in Fig. \ref{fig:experiments}.
 
     One machine is referred to as the \emph{copy} of another machine, if both machines have identical transition tables, and if both are at the same state before the experiment commences. Experiments can be classified according to the number of copies which they require of the machine under investigation:
 
@@ -62,10 +75,16 @@ As was pointed out in Chap. 1, the response of a nontrivial machine \emph{M} to 
 \end{equation*}
 consists, therefore, of applying the diagnosing sequence for $ \{  \sigma_{i_{0}}, \sigma_{j_{0}} \} $ to $M$ and observing the response; on the basis of this response, the true initial state can be identified. In the remainder of this section we shall show how diagnosing sequences for specified pairs of states can be constructed. Let $\sigma_{i_{0}}$ and $\sigma_{j_{0}}$ be \emph{l}-distinguishable and $(\emph{l}-1)$-equivalent, for some $1 \leq \emph{l} \leq \emph{n}-1 $. Then the length of the shortest diagnosing sequence for $ \{  \sigma_{i_{0}}, \sigma_{j_{0}} \} $ is \emph{l}. Any diagnosing sequence for $ \{  \sigma_{i_{0}}, \sigma_{j_{0}} \} $ whose length is \emph{l}, as specified above, will be called a \emph{minimal diagnosing sequence} for $ \{  \sigma_{i_{0}}, \sigma_{j_{0}} \} $ and denoted by $ \upvarepsilon(\sigma_{i_{0}}, \sigma_{j_{0}} )  $. If $\sigma_{i_{0}}$ and $\sigma_{j_{0}}$ are \emph{l}-distinguishable and $(\emph{l}-1)$-equivalent, $\sigma_{i_{0}}$ and $\sigma_{j_{0}}$ must be disjoint states in $P_l$ and adoint $P_{l-1}$. \emph{l}, therefore, can be determined by constructing the \emph{k}-equivalence partitions for the given machine $M$ and noting the lowest value of \emph{k} such that $P_k$ contains $\sigma_{i_{0}}$ and $\sigma_{j_{0}}$  in two separate classes; this value must equal \emph{l}.
 
-% TODO: added Fig 4.2
-When $ \upvarepsilon(\sigma_{i_{0}}, \sigma_{j_{0}} ) $ is applied to $ M|\sigma_{i_{0}}$ and $ M|\sigma_{j_{0}}$, the output sequences are identical except for the very last - the \emph{l}th - symbol. Consequently, the \emph{k}th successors of $\sigma_{i_{0}}$ and $\sigma_{j_{0}}$, with respect to $ \upvarepsilon(\sigma_{i_{0}}, \sigma_{j_{0}} ) $ are $ (\emph{l} - \emph{k})$-distinguishable and $(\emph{l} - \emph{k} - 1)$-equivalent, for all $0 \leq \emph{k} \leq \emph{l}-1 $. This situation is depicted in Fig. 4.2, where $ \upvarepsilon(\sigma_{i_{0}}, \sigma_{j_{0}} ) $  is taken as $\xi_{u_{1}}\xi_{u_{2}}...\xi_{u_{l}}$
+When $ \upvarepsilon(\sigma_{i_{0}}, \sigma_{j_{0}} ) $ is applied to $ M|\sigma_{i_{0}}$ and $ M|\sigma_{j_{0}}$, the output sequences are identical except for the very last - the \emph{l}th - symbol. Consequently, the \emph{k}th successors of $\sigma_{i_{0}}$ and $\sigma_{j_{0}}$, with respect to $ \upvarepsilon(\sigma_{i_{0}}, \sigma_{j_{0}} ) $ are $ (\emph{l} - \emph{k})$-distinguishable and $(\emph{l} - \emph{k} - 1)$-equivalent, for all $0 \leq \emph{k} \leq \emph{l}-1 $. This situation is depicted in Fig. \ref{fig:minimalDiagSequence}, where $ \upvarepsilon(\sigma_{i_{0}}, \sigma_{j_{0}} ) $  is taken as $\xi_{u_{1}}\xi_{u_{2}}...\xi_{u_{l}}$
 
-The sequence of states traversed by $ M|\sigma_{i_{0}}$ is $\sigma_{i_{1}}, \sigma_{i_{2}}, ..., \sigma_{i_{l}} $, the sequence of states traversed by $ M|\sigma_{j_{0}} $ is $\sigma_{j_{1}}, \sigma_{j_{2}}, ..., \sigma_{j_{l}} $, the output sequence yield by $ M|\sigma_{i_{0}}$ is $\zeta_{\nu_{1}}, \zeta_{\nu_{2}}, ..., \zeta^{(i)}_{\nu_{l}} $ and the output sequence yielded by $ M|\sigma_{j_{0}} $ is $\zeta_{\nu_{1}}, \zeta_{\nu_{2}}, ..., \zeta^{(j)}_{\nu_{l}} $ where $ \zeta^{(i)}_{\nu_{l}} \neq \zeta^{(j)}_{\nu_{l}} $. Using the notation of Fig 4.2, it can be stated that, if $\sigma_{i_{0}}$ and $\sigma_{j_{0}}$ are \emph{l}-distinguishable and $(\emph{l}-1)$-equivalent, and if $\xi_{u_{1}}\xi_{u_{2}}...\xi_{u_{l}}$ is a minimal diagnosing sequence for $\{  \sigma_{i_{0}}, \sigma_{j_{0}}\}$, then: \begin{inparaenum}[(1) ]
+\begin{figure}
+    \centering
+    \includegraphics[width=330pt,clip]{images/eps/minimalDiagnosingSequence}
+    \caption{Minimal diagnosing sequence for $\{ \sigma_{i_{0}}, \sigma_{j_{0}} \}$ }
+    \label{fig:minimalDiagSequence}
+\end{figure}
+
+The sequence of states traversed by $ M|\sigma_{i_{0}}$ is $\sigma_{i_{1}}, \sigma_{i_{2}}, ..., \sigma_{i_{l}} $, the sequence of states traversed by $ M|\sigma_{j_{0}} $ is $\sigma_{j_{1}}, \sigma_{j_{2}}, ..., \sigma_{j_{l}} $, the output sequence yield by $ M|\sigma_{i_{0}}$ is $\zeta_{\nu_{1}}, \zeta_{\nu_{2}}, ..., \zeta^{(i)}_{\nu_{l}} $ and the output sequence yielded by $ M|\sigma_{j_{0}} $ is $\zeta_{\nu_{1}}, \zeta_{\nu_{2}}, ..., \zeta^{(j)}_{\nu_{l}} $ where $ \zeta^{(i)}_{\nu_{l}} \neq \zeta^{(j)}_{\nu_{l}} $. Using the notation of Fig. \ref{fig:minimalDiagSequence}, it can be stated that, if $\sigma_{i_{0}}$ and $\sigma_{j_{0}}$ are \emph{l}-distinguishable and $(\emph{l}-1)$-equivalent, and if $\xi_{u_{1}}\xi_{u_{2}}...\xi_{u_{l}}$ is a minimal diagnosing sequence for $\{  \sigma_{i_{0}}, \sigma_{j_{0}}\}$, then: \begin{inparaenum}[(1) ]
     \item For $ 1 \leq \emph{k} \leq \emph{l} - 1$, $\xi_{u_{k}}$ is an input symbol which passed $\sigma_{i_{k-1}}$ and $\sigma_{j_{k-1}}$ into a pair of $(\emph{l} - \emph{k})$-distinguishable and $(\emph{l} - \emph{k} - 1)$-equivalent states $\sigma_{i_{k}}$ and $\sigma_{j_{k}}$.
     \item $\xi_{u_{l}}$ is an inpu symbol which yields distinct output symbols when applied to $ M|\sigma_{i_{l-1}}$ and $ M|\sigma_{j_{l-1}}$.
 \end{inparaenum}
@@ -89,7 +108,14 @@ The sequence of states traversed by $ M|\sigma_{i_{0}}$ is $\sigma_{i_{1}}, \sig
     %TODO: remove to keep \incSampleMachine in the future
     \setcounter{machineNumber}{16}
     \incSampleMachine
-    Machine \sampleMachine \label{labelMachineA17} of Fig. 4.3 and Table \ref{table:deltaTableA17} will be used for illustration. Tables \ref{table:tableP1A17} to \ref{table:tableP4A17} are the $P_1, P_2, P_3$ and $P_4$ tables of \ref{labelMachineA17}. For example, to find the minimal diagnosing sequence for $\{1,2\}$, namely $ \upvarepsilon( 1, 2 )$, we start from $P_3$ table, which is the ``last'' table in which rows 1 and 2 are adjoint. Rows 1 and 2 in the $P_3$ table have distinct subscripts in entries ``$4_c$'' and ``$5_d$'' which appear in column $\beta$. $\beta$, then, is the first symbol in $\upvarepsilon(1,2)$. In the $P_2$ table, rows 4 and 5 have distinct subscripts in entries ``$3_b$'' and ``$2_a$'' which appears in column $\alpha$. $\alpha$, then, is the second symbol in $\upvarepsilon(1,2)$. In the $P_1$ table, rows 3 and 2 have distinct subscripts in entries ``$5_b$'' and ``$1_a$'', which appears in column $\alpha$. $\alpha$, then, is the third symbol in $\upvarepsilon(1,2)$. Alternatively, $\beta$ could be chosen as the third symbol, since rows 3 and 2 have distinct subscripts in entries ``$1_a$'' and ``$5_b$'',  which appear in column $\beta$. In the $z_\nu$ subtable, rows 1 and 5 have distinct entries (0 and 1) in column $\alpha$. $\alpha$, then, is the fourth and last symbol in $\upvarepsilon(1,2)$. Thus, (1,2) is either $\beta\alpha\alpha\alpha$ or $\beta\alpha\beta\alpha$. From Table \ref{table:deltaTableA17} or Fig. 4.3 it can be readily verified that when $\beta\alpha\alpha\alpha$ is applied to \ref{labelMachineA17} at state 1 and state 2, the last output symbol is 1 and 0, respectively. Consequently, if $\{1,2\}$ is the admissable set of \ref{labelMachineA17}, the diagnosing experiment may be conducted by applying $\beta\alpha\alpha\alpha$ and observing the last input: if this symbol is 1, the initial state is 1, and if this symbol is 0, the initial state is 2. Table \ref{table:diagSequenceA17} lists the minimal diagnosing sequences for all pairs of states $ \{  \sigma_{i_{0}}, \sigma_{j_{0}} \} $ in \ref{labelMachineA17}; the last two columns in this table indicate the last output symbols $\zeta^{(i)}_{\nu_{l}}$ and $\zeta^{(j)}_{\nu_{l}}$ observed when the minimal diagnosing sequence is applied to $\sigma_{i_{0}}$ and $\sigma_{j_{0}}$, respectively. Where two or more minimal diagnosing sequences can be constructed for a given state pair, only one such sequence is listed in the table.
+    Machine \sampleMachine \label{labelMachineA17} of Fig. \ref{fig:machineA17}  and Table \ref{table:deltaTableA17} will be used for illustration. Tables \ref{table:tableP1A17} to \ref{table:tableP4A17} are the $P_1, P_2, P_3$ and $P_4$ tables of \ref{labelMachineA17}. For example, to find the minimal diagnosing sequence for $\{1,2\}$, namely $ \upvarepsilon( 1, 2 )$, we start from $P_3$ table, which is the ``last'' table in which rows 1 and 2 are adjoint. Rows 1 and 2 in the $P_3$ table have distinct subscripts in entries ``$4_c$'' and ``$5_d$'' which appear in column $\beta$. $\beta$, then, is the first symbol in $\upvarepsilon(1,2)$. In the $P_2$ table, rows 4 and 5 have distinct subscripts in entries ``$3_b$'' and ``$2_a$'' which appears in column $\alpha$. $\alpha$, then, is the second symbol in $\upvarepsilon(1,2)$. In the $P_1$ table, rows 3 and 2 have distinct subscripts in entries ``$5_b$'' and ``$1_a$'', which appears in column $\alpha$. $\alpha$, then, is the third symbol in $\upvarepsilon(1,2)$. Alternatively, $\beta$ could be chosen as the third symbol, since rows 3 and 2 have distinct subscripts in entries ``$1_a$'' and ``$5_b$'',  which appear in column $\beta$. In the $z_\nu$ subtable, rows 1 and 5 have distinct entries (0 and 1) in column $\alpha$. $\alpha$, then, is the fourth and last symbol in $\upvarepsilon(1,2)$. Thus, (1,2) is either $\beta\alpha\alpha\alpha$ or $\beta\alpha\beta\alpha$.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=220pt,clip]{images/eps/machineA17}
+    \caption{Machine \ref{labelMachineA17}}
+    \label{fig:machineA17}
+\end{figure}
+ From Table \ref{table:deltaTableA17} or Fig. \ref{fig:machineA17} it can be readily verified that when $\beta\alpha\alpha\alpha$ is applied to \ref{labelMachineA17} at state 1 and state 2, the last output symbol is 1 and 0, respectively. Consequently, if $\{1,2\}$ is the admissable set of \ref{labelMachineA17}, the diagnosing experiment may be conducted by applying $\beta\alpha\alpha\alpha$ and observing the last input: if this symbol is 1, the initial state is 1, and if this symbol is 0, the initial state is 2. Table \ref{table:diagSequenceA17} lists the minimal diagnosing sequences for all pairs of states $ \{  \sigma_{i_{0}}, \sigma_{j_{0}} \} $ in \ref{labelMachineA17}; the last two columns in this table indicate the last output symbols $\zeta^{(i)}_{\nu_{l}}$ and $\zeta^{(j)}_{\nu_{l}}$ observed when the minimal diagnosing sequence is applied to $\sigma_{i_{0}}$ and $\sigma_{j_{0}}$, respectively. Where two or more minimal diagnosing sequences can be constructed for a given state pair, only one such sequence is listed in the table.
 
 \begin{table}[h]
 \parbox{ .45\linewidth }{
@@ -195,7 +221,7 @@ The sequence of states traversed by $ M|\sigma_{i_{0}}$ is $\sigma_{i_{1}}, \sig
     \label{table:tableP4A17}
 \end{table}
 
-\begin{table}
+\begin{table}[t]
     \centering
     \begin{tabular}{ c | c | c | c | c }
         \hline
