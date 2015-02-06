@@ -35,3 +35,12 @@
 \renewcommand*\themachineNumber{A\arabic{machineNumber}}
 \newcommand{\incSampleMachine}{ \refstepcounter{machineNumber} }
 \newcommand{\sampleMachine}{A\arabic{machineNumber}}
+
+\newcounter{algorithmNumber}
+\renewcommand*\thealgorithmNumber{\thechapter.\arabic{algorithmNumber}}
+
+\newcommand{\algorithm}{
+    \refstepcounter{algorithmNumber}
+    Algorithm \arabic{chapter}.\arabic{algorithmNumber}.
+}
+
