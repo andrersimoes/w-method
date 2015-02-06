@@ -17,6 +17,8 @@ public:
     // generate and returns a P set for the machine
     std::list<std::string> processDeltaTable( DeltaTable *dt );
 
+    void print( void );
+
 private:
     void buildTestTree( int state,
             std::vector<bool> *ptrDoneV,

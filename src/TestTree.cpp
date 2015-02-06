@@ -42,3 +42,15 @@ void TestTree::buildTestTree( int state, std::vector<bool> *ptrDoneV, std::strin
 
     }
 }
+
+void TestTree::print( void )
+{
+    std::list<std::string>::iterator it, end;
+    it = testTreeList.begin();
+    end = testTreeList.end();
+
+    std::cout << "TestTree::print() - P set for last transition table" << std::endl;
+
+    while( it != end )
+        std::cout << *it++ << std::endl;
+}
