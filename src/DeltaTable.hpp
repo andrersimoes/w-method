@@ -1,12 +1,14 @@
-#include "DeltaTable.h"
-
-void DeltaTable::resizeMatrices( void )
+template<typename OutType>
+inline
+void DeltaTable<OutType>::resizeMatrices( void )
 {
     _outputMat.setSize( _numStates, _alfabet.size() );
     _nextStateMat.setSize( _numStates, _alfabet.size() ); 
 }
 
-void DeltaTable::print( void )
+template<typename OutType>
+inline
+void DeltaTable<OutType>::print( void )
 {
     std::set<std::string>::iterator alfaStart, alfaIt, alfaEnd;
     alfaStart = _alfabet.begin();

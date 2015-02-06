@@ -6,6 +6,7 @@
 
 #include "matrix.h"
 
+template<typename OutType>
 class DeltaTable
 {
 public:
@@ -15,10 +16,10 @@ public:
     size_t getNumberOfStates(){ return _numStates; }
 
     Matrix<int> *getNextStateMatrixPtr(){ return &_nextStateMat; }
-    Matrix<int> *getOutMatrixPtr(){ return &_outputMat; }
+    Matrix<OutType> *getOutMatrixPtr(){ return &_outputMat; }
 
     Matrix<int> &getNextStateMatrixRef(){ return _nextStateMat; }
-    Matrix<int> &getOutMatrixRef(){ return _outputMat; }
+    Matrix<OutType> &getOutMatrixRef(){ return _outputMat; }
 
     void print( void );
     void resizeMatrices( void );
@@ -27,8 +28,10 @@ public:
 private:
     size_t _numStates;
     std::set<std::string> _alfabet;
-    Matrix<int> _outputMat;
+    Matrix<OutType> _outputMat;
     Matrix<int> _nextStateMat;
 };
+
+#include "DeltaTable.hpp"
 
 #endif // DELTATABLE_H
