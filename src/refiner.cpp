@@ -1,6 +1,6 @@
 #include "refiner.h"
 
-#include "DeltaTable.h"
+#include "TransitionTable.h"
 #include "ktable.h"
 
 Refiner::Refiner(){}
@@ -17,7 +17,7 @@ bool Refiner::isMachineMinimal( void )
     if( ktableV.empty() ) return false;
 
     KTable *refinement = ktableV.back();
-    if( deltaTable->getNumberOfStates() == 
+    if( transitionTable->getNumberOfStates() == 
             refinement->getEquivClassVectorRef().size() )
         return true;
     else
@@ -43,7 +43,7 @@ std::string Refiner::buildDiagSequence( int s1, int s2 )
     int currS2 = s2;
     char baseChar = 'a';
 
-    Matrix<int> *ptrNextStateM = deltaTable->getNextStateMatrixPtr();
+    Matrix<int> *ptrNextStateM = transitionTable->getNextStateMatrixPtr();
 
     while( idxL - idxK > 0 )
     {
@@ -65,17 +65,9 @@ std::string Refiner::buildDiagSequence( int s1, int s2 )
         ++idxK;
     }
 
-    Matrix<int> *ptrOutM = deltaTable->getOutMatrixPtr();
-
-    for( size_t j = 0; j < ptrOutM->numCols(); ++j )
-    {
-        if( ptrOutM->operator[]( currS1 )[ j ] != 
-            ptrOutM->operator[]( currS2 )[ j ] )
-        {
-            strSequence += ( baseChar + (char)j );
-            break;
-        }
-    }
+    size_t actionIdx;
+    transitionTable->areOutputsEqual( currS1, currS2, &actionIdx );
+    strSequence += ( baseChar + (char)actionIdx );
 
     return strSequence;
 }
@@ -93,7 +85,7 @@ std::list<std::string> Refiner::buildDiagSet( bool fullSet )
 
 void Refiner::buildFullDiagSet( std::list<std::string> &retval )
 {
-    int numStates = (int)  deltaTable->getNumberOfStates();
+    int numStates = (int)  transitionTable->getNumberOfStates();
     for( int s1 = 0; s1 < numStates; ++s1 )
         for( int s2 = s1+1; s2 < numStates; ++s2 )
             retval.push_back( buildDiagSequence( s1, s2 ) );
@@ -101,7 +93,7 @@ void Refiner::buildFullDiagSet( std::list<std::string> &retval )
 
 void Refiner::buildUniqueStringSet( std::list<std::string> &retval )
 {
-    int numStates = (int)  deltaTable->getNumberOfStates();
+    int numStates = (int)  transitionTable->getNumberOfStates();
     for( int s1 = 0; s1 < numStates; ++s1 )
     {
         for( int s2 = s1+1; s2 < numStates; ++s2 )
@@ -158,12 +150,12 @@ void Refiner::keepGreaterElementOnList( std::string &strElement,
 }
 
 
-void Refiner::processDeltaTable( DeltaTable *dt )
+void Refiner::processTransitionTable( TransitionTable *dt )
 {
-    deltaTable = dt;
+    transitionTable = dt;
     KTable *partition = new KTable;
 
-    partition->buildFirstPartition( deltaTable );
+    partition->buildFirstPartition( transitionTable );
     ktableV.push_back( partition );
 
     while( ( partition = partition->refinePartition() ) )

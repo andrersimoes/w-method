@@ -1,10 +1,10 @@
 #include "ktable.h"
 
-#include "DeltaTable.h"
+#include "TransitionTable.h"
 
 KTable::KTable()
 {
-    ptrOutM = ptrNextM = 0;
+    ptrNextM = 0;
 }
 
 bool KTable::areNextStatesEqual( int s1, int s2 )
@@ -13,21 +13,6 @@ bool KTable::areNextStatesEqual( int s1, int s2 )
     for( size_t j = 0; j < classIdxM.numCols(); ++j )
     {
         if( classIdxM[ s1 ][ j ] != classIdxM[ s2 ][ j ] )
-        {
-            equal = false;
-            break;
-        }
-    }
-    return equal;
-}
-
-bool KTable::areOutputsEqual( int s1, int s2 )
-{
-    bool equal = true;
-    size_t cols = ptrOutM->numCols();
-    for( size_t j = 0; j < cols; ++j )
-    {
-        if( ptrOutM->operator[]( s1 )[ j ] != ptrOutM->operator[]( s2  )[ j ] )
         {
             equal = false;
             break;
@@ -63,14 +48,13 @@ bool KTable::areStatesInTheSameClass( int s1, int s2 )
     return false;
 }
 
-void KTable::buildFirstPartition( DeltaTable *deltaTable )
+void KTable::buildFirstPartition( TransitionTable *transitionTable )
 {
-    ptrNextM = deltaTable->getNextStateMatrixPtr();
-    ptrOutM = deltaTable->getOutMatrixPtr();
+    ptrNextM = transitionTable->getNextStateMatrixPtr();
 
     std::list<int> stateList;
 
-    for( size_t sIdx = 0; sIdx < ptrOutM->numRows(); ++sIdx )
+    for( size_t sIdx = 0; sIdx < transitionTable->getNumberOfStates(); ++sIdx )
         stateList.push_back( (int)sIdx );
 
     while( stateList.empty() == false )
@@ -84,7 +68,7 @@ void KTable::buildFirstPartition( DeltaTable *deltaTable )
         std::list<int>::iterator it = stateList.begin();
         while( it != stateList.end() )
         {
-            if( areOutputsEqual( baseState, *it ) )
+            if( transitionTable->areOutputsEqual( baseState, *it ) )
             {
                 equivStates.push_back( *it );
                 it = stateList.erase( it );
@@ -133,7 +117,7 @@ void KTable::createIndexesForClass( EquivClass *ec )
 
 void KTable::createTableIndexes( void )
 {
-    classIdxM.setSize( ptrOutM->numRows(), ptrOutM->numCols() );
+    classIdxM.setSize( ptrNextM->numRows(), ptrNextM->numCols() );
 
     for( size_t i = 0; i < equivClassV.size(); ++i )
         createIndexesForClass( equivClassV.at( i ) );
@@ -217,9 +201,7 @@ KTable* KTable::refinePartition()
     
     if( refined->equivClassV.size() != equivClassV.size() )
     {
-        refined->ptrOutM = ptrOutM;
         refined->ptrNextM = ptrNextM;
-
         refined->createTableIndexes();
     }
     else

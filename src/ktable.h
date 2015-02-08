@@ -11,7 +11,7 @@ struct EquivClass
     std::list<int> equivStateL;
 };
 
-class DeltaTable;
+class TransitionTable;
 
 class KTable
 {
@@ -19,7 +19,7 @@ public:
     KTable();
 
     bool areStatesInTheSameClass( int s1, int s2 );
-    void buildFirstPartition( DeltaTable *deltaTable );
+    void buildFirstPartition( TransitionTable *transitionTable );
     void clear( void );
 
     std::vector<EquivClass*> & getEquivClassVectorRef(){ return equivClassV; }
@@ -38,7 +38,6 @@ private:
 
 private:
     std::vector<EquivClass*> equivClassV;
-    Matrix<int> *ptrOutM;
     Matrix<int> *ptrNextM;
     Matrix<char> classIdxM;
 };

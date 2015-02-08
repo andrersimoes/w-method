@@ -1,20 +1,19 @@
 #include "TestTree.h"
-#include "DeltaTable.h"
+#include "TransitionTable.h"
 
 TestTree::TestTree()
 {
-    deltaTable = 0;
+    transitionTable = 0;
 }
 
-std::list<std::string> TestTree::processDeltaTable( DeltaTable *dt )
+std::list<std::string> TestTree::processTransitionTable( TransitionTable *tt )
 {
-    deltaTable = dt;
-    ptrNextMat = dt->getNextStateMatrixPtr();
-    ptrOutMat = dt->getOutMatrixPtr();
+    transitionTable = tt;
+    ptrNextMat = tt->getNextStateMatrixPtr();
 
     std::string buffer;
     std::vector<bool> visitedStateV;
-    visitedStateV.resize( deltaTable->getNumberOfStates() );
+    visitedStateV.resize( transitionTable->getNumberOfStates() );
 
     testTreeList.clear();
     buildTestTree( 0, &visitedStateV, &buffer );

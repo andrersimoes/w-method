@@ -1,6 +1,24 @@
 template<typename OutType>
 inline
-void DeltaTable<OutType>::resizeMatrices( void )
+bool DynamicTransitionTable<OutType>::areOutputsEqual( int s1, int s2, size_t *retvalActionIdx )
+{
+    bool equal = true;
+    size_t cols = _outputMat.numCols();
+    for( size_t j = 0; j < cols; ++j )
+    {
+        if( _outputMat[ s1 ][ j ] != _outputMat[ s2  ][ j ] )
+        {
+            if( retvalActionIdx ) *retvalActionIdx = j;
+            equal = false;
+            break;
+        }
+    }
+    return equal;
+}
+
+template<typename OutType>
+inline
+void DynamicTransitionTable<OutType>::resizeMatrices( void )
 {
     _outputMat.setSize( _numStates, _alfabet.size() );
     _nextStateMat.setSize( _numStates, _alfabet.size() ); 
@@ -8,7 +26,7 @@ void DeltaTable<OutType>::resizeMatrices( void )
 
 template<typename OutType>
 inline
-void DeltaTable<OutType>::print( void )
+void DynamicTransitionTable<OutType>::print( void )
 {
     std::set<std::string>::iterator alfaStart, alfaIt, alfaEnd;
     alfaStart = _alfabet.begin();
@@ -38,3 +56,4 @@ void DeltaTable<OutType>::print( void )
         std::cout << std::endl;
     }
 }
+

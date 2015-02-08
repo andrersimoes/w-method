@@ -7,7 +7,7 @@
 
 #include "matrix.h"
 
-class DeltaTable;
+class TransitionTable;
 
 class TestTree
 {
@@ -15,7 +15,7 @@ public:
     TestTree();
 
     // generate and returns a P set for the machine
-    std::list<std::string> processDeltaTable( DeltaTable *dt );
+    std::list<std::string> processTransitionTable( TransitionTable *tt );
 
     void print( void );
 
@@ -24,9 +24,8 @@ private:
             std::vector<bool> *ptrDoneV,
             std::string *ptrBuffer );
 
-    Matrix<int> *ptrOutMat;
     Matrix<int> *ptrNextMat;
-    DeltaTable *deltaTable;
+    TransitionTable *transitionTable;
 
     std::list<std::string> testTreeList;
 };

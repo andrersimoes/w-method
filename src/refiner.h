@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-class DeltaTable;
+class TransitionTable;
 class KTable;
 
 class Refiner
@@ -16,7 +16,7 @@ public:
     std::list<std::string> buildDiagSet( bool full = false ); // TODO
     void clear();
     bool isMachineMinimal( void );
-    void processDeltaTable( DeltaTable *dt );
+    void processTransitionTable( TransitionTable *tt );
 
     ~Refiner();
 private:
@@ -27,7 +27,7 @@ private:
 
     std::string buildDiagSequence( int s1, int s2 );
 
-    DeltaTable *deltaTable;
+    TransitionTable *transitionTable;
     std::vector<KTable*> ktableV;
 };
 
