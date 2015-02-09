@@ -19,10 +19,15 @@ public:
     Matrix<int> &getNextStateMatrixRef(){ return _nextStateMat; }
     size_t getNumberOfStates(){ return _numStates; }
 
+    virtual void loadOutputsFromFile( std::string file ) = 0;
+    void loadNextStatesFromFile( std::string file ){ _nextStateMat.loadFromFile( file ); }
+
     virtual void print( void ) = 0;
     virtual void resizeMatrices( void ) = 0;
 
     void setNumberOfStates( size_t numStates ){ _numStates = numStates; }
+
+    virtual ~TransitionTable(){}
 protected:
     size_t _numStates;
     std::set<std::string> _alfabet;

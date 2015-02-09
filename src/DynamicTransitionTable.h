@@ -13,6 +13,7 @@ public:
 
     Matrix<OutType> *getOutMatrixPtr(){ return &_outputMat; }
     Matrix<OutType> &getOutMatrixRef(){ return _outputMat; }
+    void loadOutputsFromFile( std::string file ){ _outputMat.loadFromFile( file); }
 
     void print( void );
     void resizeMatrices( void );

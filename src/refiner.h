@@ -15,6 +15,7 @@ public:
 
     std::list<std::string> buildDiagSet( bool full = false ); // TODO
     void clear();
+    const std::vector<KTable*> & getKTableVectorRef( void ){ return ktableV; }
     bool isMachineMinimal( void );
     void processTransitionTable( TransitionTable *tt );
 
