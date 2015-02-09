@@ -1,0 +1,5 @@
+numberOfStates 4
+actions 6 a b c d e f
+minimal true
+wset 6 a a a a a e
+RefinedClasses 4

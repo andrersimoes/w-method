@@ -67,7 +67,7 @@ void MachineTest::load( std::string filename )
         wL.push_back( tmp );
     }
 
-    file >> tmp; // RefinedPk (last PkTable)
+    file >> tmp; // RefinedClasses (from last PkTable)
     file >> quantity; // 
 
     numRefinementClasses = quantity;
@@ -75,8 +75,8 @@ void MachineTest::load( std::string filename )
 
 void MachineTest::print()
 {
-    std::cout << "number of states " << numStates << std::endl;
-    std::cout << "minimal " << minimal << std::endl;
+    std::cout << "number of states = " << numStates << std::endl;
+    std::cout << "minimal = " << ( (minimal == true) ? "true" : "false" )  << std::endl;
 
     std::list<std::string>::iterator it = strActionL.begin();
     std::cout << "actions = ";

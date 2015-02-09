@@ -1,0 +1,5 @@
+numberOfStates 9
+actions 3 alpha beta gamma
+minimal false
+wset 0
+RefinedClasses 5

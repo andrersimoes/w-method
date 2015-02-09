@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "output.h"
+#include "ktable.h"
 #include "refiner.h"
 #include "DynamicTransitionTable.h"
 #include "MachineTest.h"
@@ -17,12 +18,15 @@ void execute( std::string testfile, std::string outType, std::string strNextFile
     else if( outType == "Output" )
         table = new DynamicTransitionTable<Output>();
 
+    std::string path = "../data/";
+    std::string testPath = "../data/testCases/";
+
+    std::cout << std::endl;
+    std::cout << "Starting test " << testfile << std::endl;
     MachineTest mt;
-    mt.load( testfile );
+    mt.load( testPath + testfile );
     mt.configure( table );
     mt.print();
-
-    std::string path = "../data/";
 
     table->loadNextStatesFromFile( path + strNextFile );
     table->getNextStateMatrixRef() += -1;
@@ -58,7 +62,7 @@ void execute( std::string testfile, std::string outType, std::string strNextFile
             if( it1 != diagL.end() || it2 != mt.wL.end() )
             {
                 std::cout << "wset expected size: " << mt.wL.size() << std::endl;
-                std::cout << "wset size found: " << diagL.size();
+                std::cout << "wset size found: " << diagL.size() << std::endl;
                 testPassed = false;
             }
         }
@@ -72,14 +76,18 @@ void execute( std::string testfile, std::string outType, std::string strNextFile
     }
 
     const std::vector<KTable*> &ktableV = refiner.getKTableVectorRef();
-    if( ktableV.size() == mt.numRefinementClasses )
+
+    if( ktableV.empty() == false )
     {
-    }
-    else
-    {
-        std::cout << "Expected number of refinement classes: " << mt.numRefinementClasses << std::endl;
-        std::cout << "Number of refinement classes found: " << ktableV.size() << std::endl;
-        testPassed = false;    
+        KTable *lastTable = ktableV.back();
+        std::vector<EquivClass*> & classV = lastTable->getEquivClassVectorRef();
+
+        if( classV.size() != mt.numRefinementClasses )
+        {
+            std::cout << "Expected number of refinement classes: " << mt.numRefinementClasses << std::endl;
+            std::cout << "Number of refinement classes found: " << classV.size() << std::endl;
+            testPassed = false;    
+        }
     }
 
     std::cout << "Veredict: ";
@@ -94,8 +102,9 @@ void execute( std::string testfile, std::string outType, std::string strNextFile
 
 int main( void )
 {
-    //execute( "Output", "nextTable-sat01.txt", "outTable-sat01.txt" );
-    execute( "../data/testCases/test-A17.txt", "int", "nextTable-A17.txt", "outTable-A17.txt" );
+    execute( "test-A17.txt", "int", "nextTable-A17.txt", "outTable-A17.txt" );
+    execute( "test-A7.txt", "int", "nextTable-A7.txt", "outTable-A7.txt" );
+    execute( "test-sat01.txt", "Output", "nextTable-sat01.txt", "outTable-sat01.txt" );
 
     return 0;
 }

@@ -2,4 +2,4 @@ numberOfStates 5
 actions 2 alpha beta
 minimal true
 wset 10 baaa aa a a aa a a a a aaa
-RefinedPk 4
+RefinedClasses 5
