@@ -2,7 +2,7 @@
 #include <cmath>
 #include <cstdlib>
 
-#include "refiner.h"
+#include "wmethod.h"
 #include "DynamicTransitionTable.h"
 #include "output.h"
 
@@ -32,23 +32,17 @@ int main()
     nextM.print();
     outM.print();
 
-    Refiner refiner;
-    refiner.processTransitionTable( &table );
-    std::list<std::string> diagL; 
+    std::list<std::string> testCaseList;
+    WMethod wmethod;
+    wmethod.processTransitionTable( &table, &testCaseList );
 
-    std::cout << std::endl;
-    std::cout << "Minimal: " << ( ( refiner.isMachineMinimal() == true ) ? "true" : "false" ) << std::endl;
-
-    if( refiner.isMachineMinimal() )
+    std::list<std::string>::iterator it = testCaseList.begin();
+    while( it != testCaseList.end() )
     {
-        diagL = refiner.buildDiagSet( false );
-
-        while( diagL.empty() == false ) 
-        {
-            std::cout << diagL.front() << std::endl;
-            diagL.pop_front();
-        }
+        std::cout << *it << std::endl;
+        ++it;
     }
+    std::cout << "number of test case input sequences " << testCaseList.size() << std::endl;
 
     return 0;
 }

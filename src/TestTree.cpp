@@ -12,34 +12,40 @@ std::list<std::string> TestTree::processTransitionTable( TransitionTable *tt )
     ptrNextMat = tt->getNextStateMatrixPtr();
 
     std::string buffer;
+    std::list< std::pair<int,std::string> > nodeList;
     std::vector<bool> visitedStateV;
     visitedStateV.resize( transitionTable->getNumberOfStates() );
 
     testTreeList.clear();
-    buildTestTree( 0, &visitedStateV, &buffer );
-    return testTreeList;
-}
 
-void TestTree::buildTestTree( int state, std::vector<bool> *ptrDoneV, std::string *ptrBuffer )
-{
-    ptrDoneV->operator[]( state ) = true;
+    visitedStateV[ 0 ] = true;
+    nodeList.push_back( std::pair<int,std::string>( 0, "" ) );
 
-    for( size_t j = 0; j < ptrNextMat->getCols(); ++j )
+    while( ! nodeList.empty() )
     {
-        int nextState = ptrNextMat->operator[]( state )[ j ];
+        int nodeIdx = nodeList.front().first;
+        std::string inputSeq = nodeList.front().second;
+        if( ! inputSeq.empty() ) testTreeList.push_back( inputSeq );
 
-        (*ptrBuffer) += j + 'a';
+        for( size_t j = 0; j < ptrNextMat->getCols(); ++j )
+        {
+            int nextState = ptrNextMat->operator[]( nodeIdx )[ j ];
 
-        std::cout << "From = " << state+1 << " to = " << nextState+1 << " --> " << *ptrBuffer << std::endl;
+            char input = 'a' + j;
 
-        testTreeList.push_back( *ptrBuffer );
-        
-        if( ptrDoneV->operator[]( nextState ) == false )
-            buildTestTree( nextState, ptrDoneV, ptrBuffer );
+            if( ! visitedStateV[ nextState ] )
+            {
+                visitedStateV[ nextState ] = true;
+                nodeList.push_back( std::pair<int,std::string>( nextState, inputSeq + input ) );
+            }
+            else
+                testTreeList.push_back( inputSeq + input );
+        }
 
-        ptrBuffer->erase( ptrBuffer->end() - 1 );
-
+        nodeList.pop_front();
     }
+
+    return testTreeList;
 }
 
 void TestTree::print( void )
