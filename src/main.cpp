@@ -13,32 +13,41 @@ int main()
     table.addAction( "b" );
     table.addAction( "c" );
     table.addAction( "d" );
-    table.addAction( "e" );
-    table.addAction( "f" );
+    //table.addAction( "e" );
+    //table.addAction( "f" );
 
-    table.setNumberOfStates( 4 );
+    table.setNumberOfStates( 3 );
     table.resizeMatrices();
 
     Matrix<Output> &outM = table.getOutMatrixRef();
     Matrix<int> &nextM = table.getNextStateMatrixRef();
 
-    nextM.loadFromFile( "../data/nextTable-sat01.txt" );
-    outM.loadFromFile( "../data/outTable-sat01.txt" );
+    std::string fileMiddleName = "sunEarthInsuficientRef";
+
+    nextM.loadFromFile( "../data/nextTable-" + fileMiddleName +".txt" );
+    outM.loadFromFile( "../data/outTable-" + fileMiddleName +".txt" );
+
+    nextM += -1;
 
     nextM.print();
     outM.print();
 
     Refiner refiner;
     refiner.processTransitionTable( &table );
-    std::list<std::string> diagL = refiner.buildDiagSet( false );
+    std::list<std::string> diagL; 
 
     std::cout << std::endl;
     std::cout << "Minimal: " << ( ( refiner.isMachineMinimal() == true ) ? "true" : "false" ) << std::endl;
 
-    while( diagL.empty() == false ) 
+    if( refiner.isMachineMinimal() )
     {
-        std::cout << diagL.front() << std::endl;
-        diagL.pop_front();
+        diagL = refiner.buildDiagSet( false );
+
+        while( diagL.empty() == false ) 
+        {
+            std::cout << diagL.front() << std::endl;
+            diagL.pop_front();
+        }
     }
 
     return 0;
