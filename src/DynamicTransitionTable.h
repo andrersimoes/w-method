@@ -1,6 +1,8 @@
 #ifndef DYNAMICTRANSITIONTABLE_H
 #define DYNAMICTRANSITIONTABLE_H
 
+#include "input.h"
+
 #include "TransitionTable.h"
 
 template<typename OutType>

@@ -1,0 +1,5 @@
+#symbol signalType angularReference timeToReference timeOnSteady
+a          Ramp         0.05              5500           0  
+b          Step           90              5500           0  
+c          Ramp         0.05                55           0
+d          Step           90                55           0  

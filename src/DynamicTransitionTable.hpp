@@ -20,24 +20,27 @@ template<typename OutType>
 inline
 void DynamicTransitionTable<OutType>::resizeMatrices( void )
 {
-    _outputMat.setSize( _numStates, _alfabet.size() );
-    _nextStateMat.setSize( _numStates, _alfabet.size() ); 
+    _outputMat.setSize( _numStates, _alphabet.size() );
+    _nextStateMat.setSize( _numStates, _alphabet.size() ); 
 }
 
 template<typename OutType>
 inline
 void DynamicTransitionTable<OutType>::print( void )
 {
-    std::set<std::string>::iterator alfaStart, alfaIt, alfaEnd;
-    alfaStart = _alfabet.begin();
-    alfaEnd = _alfabet.end();
+    std::map<char,Input*>::iterator alfaStart, alfaIt, alfaEnd;
+    alfaStart = _alphabet.begin();
+    alfaEnd = _alphabet.end();
 
     std::cout << " state | ";
     for( unsigned short i = 0; i < 2; ++i )
     {
         alfaIt = alfaStart;
         while( alfaIt != alfaEnd )
-            std::cout << *alfaIt++ << " | ";
+        {
+            std::cout << alfaIt->second->getId() << " | ";
+            ++alfaIt;
+        }
     }
     std::cout << std::endl;
 

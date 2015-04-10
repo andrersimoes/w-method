@@ -7,6 +7,8 @@ double Output::globalError = 0.0000001;
 
 bool operator == ( const Output &a, const Output &b )
 {
+    if( a.type != b.type ) return false;
+
     double valueError = fabs( a.value - b.value );
     double errorError = fabs( a.error - b.error );
 
@@ -18,8 +20,15 @@ bool operator == ( const Output &a, const Output &b )
 
 bool operator != ( const Output &a, const Output &b )
 {
+    if( a.type != b.type ) return true;
+
     double valueError = fabs( a.value - b.value );
     double errorError = fabs( a.error - b.error );
+
+#ifdef DEBUG
+    std::string aType = ( (a.type == Output::OUT_STEP) ? "step" : "ramp" );
+    std::string bType = ( (b.type == Output::OUT_STEP) ? "step" : "ramp" );
+#endif
 
     if( valueError > Output::globalError || errorError > Output::globalError )
         return true;
@@ -30,20 +39,26 @@ bool operator != ( const Output &a, const Output &b )
 
 std::istream & operator >> ( std::istream &stream, Output &out )
 {
-    /*std::string buffer;
+    /*char c;
+    std::string strType;
+
+    std::string buffer;
     stream >> c; // remove {
+    stream >> strType;
+    strType.erase( strType.end() - 1 );
     stream >> out.value;
     stream >> c; // remove ,
     stream >> out.error;
     stream >> buffer; // remove {*/
 
-    int numberCounter = 0;
+    int paramCounter = 0;
     bool curlyBrackets = false;
 
     char c;
     std::string buffer;
     while( stream.get( c ) )
     {
+        //std::cout << c << " " << (int) c << std::endl;
         if( c == '{' && !curlyBrackets ) 
         {
             curlyBrackets = true;
@@ -51,7 +66,7 @@ std::istream & operator >> ( std::istream &stream, Output &out )
         }
         else if( c == '}' && curlyBrackets )
         {
-            if( ! buffer.empty() && numberCounter == 1 )
+            if( ! buffer.empty() && paramCounter == 2 )
                 out.error = atof( buffer.c_str() );
             else
             {
@@ -66,21 +81,58 @@ std::istream & operator >> ( std::istream &stream, Output &out )
         {
             if( c == ',' )
             {
-                if( numberCounter == 0 && buffer.empty() == false )
+                std::string errorMsg = "Output::operator >>() - bad data after value ";
+                switch( paramCounter )
                 {
-                    out.value = atof( buffer.c_str() ); ++numberCounter;
-                    buffer.clear();
-                }
-                else
-                {
-                    std::cout << "Output::operator >>() - bad number after value " 
-                        << buffer << std::endl;
-                    throw;
-                    break;
+                    case 0:
+                    {
+                        if( buffer.empty() == false )
+                        {
+                            if( buffer == "step" ) out.type = Output::OUT_STEP;
+                            else if( buffer == "ramp" ) out.type = Output::OUT_RAMP;
+                            else
+                            {
+                                std::cout << "Output::operator >>() - bad type = \"" << buffer << "\""<< std::endl;
+                                throw;
+                            }
+
+                            buffer.clear();
+                            ++paramCounter;
+                        }
+                        else
+                        {
+                            std::cout << errorMsg << buffer << std::endl;
+                            throw;
+                        }
+                        break;
+                    }
+                    case 1:
+                    {
+                        if( buffer.empty() == false )
+                        {
+                            out.value = atof( buffer.c_str() ); ++paramCounter;
+                            buffer.clear();
+                        }
+                        else
+                        {
+                            std::cout << errorMsg << buffer << std::endl;
+                            throw;
+                        }
+
+                        break;
+                    }
+                    default:
+                    {
+                        std::cout << "Output::operator >>() - unexpected param counter value = " << paramCounter << std::endl;
+                        throw;
+                    }
                 }
             }
             else
-                if( c != ' ' ) buffer += c;
+            {
+                // Enter char = 10
+                if( c != ' ' && c != 10 ) buffer += c;
+            }
         }
     }
 
@@ -89,7 +141,8 @@ std::istream & operator >> ( std::istream &stream, Output &out )
 
 std::ostream & operator << ( std::ostream &stream, const Output &out )
 {
-    stream << "{ " << out.value << ", " << out.error << " }";
+    std::string strType = ( (out.type == Output::OUT_STEP) ? "step" : "ramp" );
+    stream << "{ " << strType << ", " << out.value << ", " << out.error << " }";
     return stream;
 }
 

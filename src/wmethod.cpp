@@ -34,4 +34,8 @@ void WMethod::processTransitionTable( TransitionTable *table, std::list<std::str
             ++diagIt;
         }
     }
+    else
+    {
+        std::cout << "WMethod::processTransitionTable() - machine is not minimal" << std::endl;
+    }
 }
