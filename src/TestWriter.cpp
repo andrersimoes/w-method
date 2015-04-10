@@ -44,7 +44,7 @@ void TestWriter::writeAngularReference( std::ostream &stream, std::string &input
 
         ++itChar;
     }
-    stream << "] " << std::endl;
+    stream << "]" << std::endl;
 }
 
 void TestWriter::writeMaxSteadyError( std::ostream &stream, std::string &inputSequence )
@@ -65,7 +65,7 @@ void TestWriter::writeMaxSteadyError( std::ostream &stream, std::string &inputSe
         stateIdx = ptrNextMat->operator[]( stateIdx )[ colIdx ];
         ++itChar;
     }
-    stream << "] " << std::endl;
+    stream << "]" << std::endl;
 }
 
 void TestWriter::writeSignalType( std::ostream &stream, std::string &inputSequence )
@@ -91,7 +91,7 @@ void TestWriter::writeSignalType( std::ostream &stream, std::string &inputSequen
 
         ++itChar;
     }
-    stream << "] " << std::endl;
+    stream << "]" << std::endl;
 }
 
 void TestWriter::writeStartTime( std::ostream &stream, std::string &inputSequence )
@@ -112,7 +112,7 @@ void TestWriter::writeStartTime( std::ostream &stream, std::string &inputSequenc
 
         ++itChar;
     }
-    stream << "] " << std::endl;
+    stream << "]" << std::endl;
 }
 
 void TestWriter::writeTimeToReference( std::ostream &stream, std::string &inputSequence )
