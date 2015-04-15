@@ -9,14 +9,46 @@ TestWriter::TestWriter( DynamicTransitionTable<Output> *ptable, std::list<std::s
     firstStateIdx = 0;
 } 
 
+///
+/// OBS: maxTransientError esta relacionado ao regime transiente
+// do sistema e carrega um valor máximo de erro de posicao angular.
+void TestWriter::loadConstraints( std::string filename )
+{
+    std::ifstream file( filename.c_str() );
+
+    if( !file.is_open() )
+    {
+        std::cout << "TestWriter::loadConstraints() - could not open file " << filename << std::endl;
+        throw;
+    }
+
+    std::string tmp;
+    file >> tmp; // sat.momentOfInertia
+    file >> satMomentOfInertia;
+    file >> tmp; // maxRwSpeed string
+    file >> maxRwSpeed;
+    file >> tmp; // maxTransientError string
+    file >> maxTransientError;
+    file >> tmp; // maxSatSpeed string
+    file >> maxSatSpeed;
+    file >> tmp; // rateToStepReference
+    file >> rateToStepReference;
+
+    file.close();
+}
+
 void TestWriter::writeKeywordTest( std::ostream &stream )
 {
+    stream << "sat.setMomentOfInertia;" << satMomentOfInertia << std::endl;
+    stream << "SetRateToStepReference;" << rateToStepReference << std::endl;
+
     std::list<std::string>::iterator itTestCase, end;
     itTestCase = ptrTestCaseL->begin();
     end = ptrTestCaseL->end();
 
     while( itTestCase!= end )
     {
+        writeSetSimTime( stream, *itTestCase );
         stream << "sat.changeDirectionTo;";
         //std::cout << std::endl << *itTestCase << std::endl;
 
@@ -25,7 +57,10 @@ void TestWriter::writeKeywordTest( std::ostream &stream )
         writeStartTime( stream, *itTestCase );
         writeTimeToReference( stream, *itTestCase );
 
+        stream << "\"maxRwSpeed " << maxRwSpeed << std::endl;
+        stream << "maxTransientError " << maxTransientError << std::endl;
         writeMaxSteadyError( stream, *itTestCase );
+        stream << "maxSatSpeed " << maxSatSpeed << "\"" << std::endl;
 
         ++itTestCase;
     }
@@ -66,6 +101,31 @@ void TestWriter::writeMaxSteadyError( std::ostream &stream, std::string &inputSe
         ++itChar;
     }
     stream << "]" << std::endl;
+}
+
+void TestWriter::writeSetSimTime( std::ostream &stream, std::string &inputSequence )
+{
+    std::string::iterator itChar = inputSequence.begin();
+    std::string::iterator endInput = inputSequence.end();
+
+    double simTime = 0;
+    if( itChar != endInput ) --endInput;
+
+    while( itChar != endInput )
+    {
+        Input *input = ptrTable->getInputById( *itChar );
+        simTime += input->getTimeToReference() + input->getTimeOnSteady();
+
+        ++itChar;
+    }
+
+    if( itChar != inputSequence.end() )
+    {
+        Input *input = ptrTable->getInputById( *itChar );
+        simTime += input->getTimeToReference() + input->getTimeOnSteady();
+    }
+
+    std::cout << "SetSimTime;" << simTime << std::endl;
 }
 
 void TestWriter::writeSignalType( std::ostream &stream, std::string &inputSequence )

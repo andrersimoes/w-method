@@ -32,10 +32,11 @@ int main()
     std::list<std::string> testCaseList;
     WMethod wmethod;
     wmethod.processTransitionTable( &table, &testCaseList );
-    printTestInputs( testCaseList );
+    //printTestInputs( testCaseList );
 
     TestWriter testWriter( &table, &testCaseList);
-    //testWriter.writeKeywordTest( std::cout );
+    testWriter.loadConstraints( "../data/constraints-" + fileMiddleName + ".txt" );
+    testWriter.writeKeywordTest( std::cout );
 
     return 0;
 }
