@@ -1,5 +1,5 @@
 sat.momentOfInertia 184.1176
 maxRwSpeed 5000
 maxTransientError 3
-maxSatSpeed 0.4
+maxTransientSpeed 0.4
 rateToStepReference 0.9995

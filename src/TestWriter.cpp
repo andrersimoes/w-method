@@ -29,8 +29,8 @@ void TestWriter::loadConstraints( std::string filename )
     file >> maxRwSpeed;
     file >> tmp; // maxTransientError string
     file >> maxTransientError;
-    file >> tmp; // maxSatSpeed string
-    file >> maxSatSpeed;
+    file >> tmp; // maxTransientSpeed string
+    file >> maxTransientSpeed;
     file >> tmp; // rateToStepReference
     file >> rateToStepReference;
 
@@ -39,12 +39,15 @@ void TestWriter::loadConstraints( std::string filename )
 
 void TestWriter::writeKeywordTest( std::ostream &stream )
 {
+    stream << "Keyword;Input;Expected Output;Comments" << std::endl;
     stream << "sat.setMomentOfInertia;" << satMomentOfInertia << std::endl;
     stream << "SetRateToStepReference;" << rateToStepReference << std::endl;
 
     std::list<std::string>::iterator itTestCase, end;
     itTestCase = ptrTestCaseL->begin();
     end = ptrTestCaseL->end();
+
+    int tcNumber = 1;
 
     while( itTestCase!= end )
     {
@@ -60,7 +63,8 @@ void TestWriter::writeKeywordTest( std::ostream &stream )
         stream << "\"maxRwSpeed " << maxRwSpeed << std::endl;
         stream << "maxTransientError " << maxTransientError << std::endl;
         writeMaxSteadyError( stream, *itTestCase );
-        stream << "maxSatSpeed " << maxSatSpeed << "\"" << std::endl;
+        stream << "maxTransientSpeed " << maxTransientSpeed << "\";";
+        stream << "Test case " << tcNumber++ << " - " << *itTestCase << std::endl;
 
         ++itTestCase;
     }

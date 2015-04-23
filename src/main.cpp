@@ -26,8 +26,8 @@ int main()
 
     nextM += -1;
 
-    nextM.print();
-    outM.print();
+    //nextM.print();
+    //outM.print();
 
     std::list<std::string> testCaseList;
     WMethod wmethod;

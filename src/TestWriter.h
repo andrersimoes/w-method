@@ -32,8 +32,8 @@ private:
     std::list<std::string> *ptrTestCaseL;
 
     double maxRwSpeed;
-    double maxSatSpeed;
     double maxTransientError;
+    double maxTransientSpeed;
     double rateToStepReference;
     double satMomentOfInertia;
 };
