@@ -61,7 +61,7 @@ void TestWriter::writeKeywordTest( std::ostream &stream )
         writeTimeToReference( stream, *itTestCase );
 
         stream << "\"maxRwSpeed " << maxRwSpeed << std::endl;
-        stream << "maxTransientError " << maxTransientError << std::endl;
+        writeMaxTransientError( stream, *itTestCase );
         writeMaxSteadyError( stream, *itTestCase );
         stream << "maxTransientSpeed " << maxTransientSpeed << "\";";
         stream << "Test case " << tcNumber++ << " - " << *itTestCase << std::endl;
@@ -99,7 +99,28 @@ void TestWriter::writeMaxSteadyError( std::ostream &stream, std::string &inputSe
         size_t colIdx = (size_t)( *itChar - 'a' );
 
         Output &out = ptrOutMat->operator[]( stateIdx )[ colIdx ];
-        stream << out.getError() << " ";
+        stream << out.getSteadyError() << " ";
+
+        stateIdx = ptrNextMat->operator[]( stateIdx )[ colIdx ];
+        ++itChar;
+    }
+    stream << "]" << std::endl;
+}
+
+void TestWriter::writeMaxTransientError( std::ostream &stream, std::string &inputSequence )
+{
+    stream << "maxTransientError [ ";
+    std::string::iterator itChar = inputSequence.begin();
+    std::string::iterator endInput = inputSequence.end();
+
+    int stateIdx = firstStateIdx;
+
+    while( itChar != endInput )
+    {
+        size_t colIdx = (size_t)( *itChar - 'a' );
+
+        Output &out = ptrOutMat->operator[]( stateIdx )[ colIdx ];
+        stream << out.getTransientError() << " ";
 
         stateIdx = ptrNextMat->operator[]( stateIdx )[ colIdx ];
         ++itChar;

@@ -24,6 +24,7 @@ private:
     void writeTimeToReference( std::ostream&, std::string& );
 
     void writeMaxSteadyError( std::ostream&, std::string& );
+    void writeMaxTransientError( std::ostream&, std::string&  );
 
     int firstStateIdx;
     DynamicTransitionTable<Output> *ptrTable;

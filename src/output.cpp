@@ -9,10 +9,10 @@ bool operator == ( const Output &a, const Output &b )
 {
     if( a.type != b.type ) return false;
 
-    double valueError = fabs( a.value - b.value );
-    double errorError = fabs( a.error - b.error );
+    double refError = fabs( a.reference - b.reference );
+    double errorError = fabs( a.steadyError - b.steadyError );
 
-    if( valueError <= Output::globalError && errorError <= Output::globalError )
+    if( refError <= Output::globalError && errorError <= Output::globalError )
         return true;
     else
         return false;
@@ -22,15 +22,15 @@ bool operator != ( const Output &a, const Output &b )
 {
     if( a.type != b.type ) return true;
 
-    double valueError = fabs( a.value - b.value );
-    double errorError = fabs( a.error - b.error );
+    double refError = fabs( a.reference - b.reference );
+    double errorError = fabs( a.steadyError - b.steadyError );
 
 #ifdef DEBUG
     std::string aType = ( (a.type == Output::OUT_STEP) ? "step" : "ramp" );
     std::string bType = ( (b.type == Output::OUT_STEP) ? "step" : "ramp" );
 #endif
 
-    if( valueError > Output::globalError || errorError > Output::globalError )
+    if( refError > Output::globalError || errorError > Output::globalError )
         return true;
     else
         return false;
@@ -66,8 +66,8 @@ std::istream & operator >> ( std::istream &stream, Output &out )
         }
         else if( c == '}' && curlyBrackets )
         {
-            if( ! buffer.empty() && paramCounter == 2 )
-                out.error = atof( buffer.c_str() );
+            if( ! buffer.empty() && paramCounter == 3 )
+                out.steadyError = atof( buffer.c_str() );
             else
             {
                 std::cout << "Output::operator >>() - " \
@@ -110,7 +110,7 @@ std::istream & operator >> ( std::istream &stream, Output &out )
                     {
                         if( buffer.empty() == false )
                         {
-                            out.value = atof( buffer.c_str() ); ++paramCounter;
+                            out.reference = atof( buffer.c_str() ); ++paramCounter;
                             buffer.clear();
                         }
                         else
@@ -119,6 +119,20 @@ std::istream & operator >> ( std::istream &stream, Output &out )
                             throw;
                         }
 
+                        break;
+                    }
+                    case 2:
+                    {
+                        if( buffer.empty() == false )
+                        {
+                            out.transientError = atof( buffer.c_str() ); ++paramCounter;
+                            buffer.clear();
+                        }
+                        else
+                        {
+                            std::cout << errorMsg << buffer << std::endl;
+                            throw;
+                        }
                         break;
                     }
                     default:
@@ -142,7 +156,7 @@ std::istream & operator >> ( std::istream &stream, Output &out )
 std::ostream & operator << ( std::ostream &stream, const Output &out )
 {
     std::string strType = ( (out.type == Output::OUT_STEP) ? "step" : "ramp" );
-    stream << "{ " << strType << ", " << out.value << ", " << out.error << " }";
+    stream << "{ " << strType << ", " << out.reference << ", " << out.transientError << ", " <<  out.steadyError << " }";
     return stream;
 }
 

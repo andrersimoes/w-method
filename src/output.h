@@ -13,16 +13,17 @@ public:
     };
 
     Output(){}
-    Output( Type responseType, double val, double err ){ type = responseType, value = val; error = err; }
+    Output( Type responseType, double ref, double transErr, double steadyErr ){ type = responseType, reference = ref; steadyError = steadyErr; transientError = transErr; }
 
+    double getReference( void ){ return reference; }
+    double getSteadyError( void ){ return steadyError; }
+    double getTransientError( void ){ return transientError; }
     Type getType( void ){ return type; }
-    double getError( void ){ return error; }
-    double getValue( void ){ return value; }
 
     static void setGlobalError( double e ){ globalError = e; }
     std::string strType( void );
 
-    Output & operator = ( const Output &b ){ type = b.type; value = b.value; error = b.error; return *this; }
+    Output & operator = ( const Output &b ){ type = b.type; reference = b.reference; transientError = b.transientError; steadyError = b.steadyError; return *this; }
 
     friend bool operator == ( const Output &a, const Output &b );
     friend bool operator != ( const Output &a, const Output &b );
@@ -32,8 +33,9 @@ private:
     static double globalError;
 
     Type type;
-    double value;
-    double error;
+    double reference;
+    double steadyError;
+    double transientError;
 };
 
 #endif // OUTPUT_H
