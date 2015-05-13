@@ -27,8 +27,6 @@ void TestWriter::loadConstraints( std::string filename )
     file >> satMomentOfInertia;
     file >> tmp; // maxRwSpeed string
     file >> maxRwSpeed;
-    file >> tmp; // maxTransientError string
-    file >> maxTransientError;
     file >> tmp; // maxTransientSpeed string
     file >> maxTransientSpeed;
     file >> tmp; // rateToStepReference
