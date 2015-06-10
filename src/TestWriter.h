@@ -36,6 +36,7 @@ private:
     double maxTransientSpeed;
     double rateToStepReference;
     double satMomentOfInertia;
+    double timeToStepReference;
 };
 
 #endif // TESTWRITER_H

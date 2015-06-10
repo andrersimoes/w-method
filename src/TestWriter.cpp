@@ -31,6 +31,8 @@ void TestWriter::loadConstraints( std::string filename )
     file >> maxTransientSpeed;
     file >> tmp; // rateToStepReference
     file >> rateToStepReference;
+    file >> tmp; // timeToStepReference
+    file >> timeToStepReference;
 
     file.close();
 }
@@ -40,6 +42,7 @@ void TestWriter::writeKeywordTest( std::ostream &stream )
     stream << "Keyword;Input;Expected Output;Comments" << std::endl;
     stream << "sat.setMomentOfInertia;" << satMomentOfInertia << std::endl;
     stream << "SetRateToStepReference;" << rateToStepReference << std::endl;
+    stream << "SetTimeToStepReference;" << timeToStepReference << std::endl;
 
     std::list<std::string>::iterator itTestCase, end;
     itTestCase = ptrTestCaseL->begin();
